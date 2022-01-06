@@ -1,0 +1,12 @@
+projects:
+  PropertyOrganizer:
+    schemaPath: app/graphql/schema.json
+    includes:
+      - app/graphql/**/*.ts
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: typescript
+        generatedFileName: app/GraphQLAPI.ts
+        docsFilePath: app/graphql

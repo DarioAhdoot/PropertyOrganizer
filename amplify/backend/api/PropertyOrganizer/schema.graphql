@@ -1,0 +1,49 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+
+enum ListingType {
+  rental
+  purchase
+}
+
+enum PropertyType {
+  house
+  apartment
+  loft
+  trailer
+  shack
+}
+
+type PropertySpec {
+  propertyType: PropertyType!
+  bedrooms: Int
+  bathrooms: Int
+  area: Int
+  diningRoom: Boolean
+  balcony: Boolean
+  patio: Boolean
+  floors: Int
+}
+
+type PurchaseInfo {
+  askingPrice: Int
+}
+
+type RentalInfo {
+  rentalPrice: Int
+  utilities: Int
+}
+
+type Property @model {
+  id: ID!
+  address: String!
+  addressUrl: String
+  listingUrl: String
+  imageUrls: [String]
+  videoUrls: [String]
+  propertySpec: PropertySpec!
+  listingType: ListingType!
+  rentalInfo: RentalInfo
+  purchaseInfo: PurchaseInfo
+}
