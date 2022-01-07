@@ -1,3 +1,4 @@
+import Amplify from 'aws-amplify';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
@@ -12,6 +13,9 @@ import {
 import { listProperties } from './graphql';
 import { propertiesAtom } from './state';
 import PropertyList from './components/PropertyList';
+
+import config from './aws-exports';
+Amplify.configure(config);
 
 const theme = {
   ...DefaultTheme,

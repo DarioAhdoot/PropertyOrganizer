@@ -1,12 +1,16 @@
 import Amplify from 'aws-amplify';
-import config from '../aws-exports';
 import API, { graphqlOperation } from '@aws-amplify/api';
 
-import { listProperties as listPropertiesQuery, getProperty } from './queries';
-import { createProperty as createPropertyMutattion, updateProperty, deleteProperty } from './mutations';
+import {
+  listProperties as listPropertiesQuery,
+  getProperty as getPropertyQuery,
+} from './queries';
+import {
+  createProperty as createPropertyMutattion,
+  updateProperty as updatePropertyMutation,
+  deleteProperty as deletePropertyMutation,
+} from './mutations';
 import * as Types from '../GraphQLAPI';
-
-Amplify.configure(config);
 
 export async function listProperties(): Promise<Types.Property[]> {
   console.log('In listProperties');
@@ -26,6 +30,26 @@ export async function listProperties(): Promise<Types.Property[]> {
   }
 }
 
+export async function getProperty(id: string): Promise<Types.Property> {
+  console.log('In getProperty');
+  const getQueryVariables: Types.GetPropertyQueryVariables = {
+    id,
+  };
+  console.log('-> calling API.graphql');
+  const result: any = await API.graphql(graphqlOperation(getPropertyQuery, getQueryVariables));
+  console.log(`-> returned from API.graphql: ${JSON.stringify(result)}`);
+  if (result.data) {
+    const getQ: Types.GetPropertyQuery = result.data;
+    if (getQ.getProperty) {
+      return getQ.getProperty as Types.Property;
+    } else {
+      throw new Error('getProperty query failed');
+    }
+  } else {
+    throw new Error('getProperty query failed');
+  }
+}
+
 export async function createProperty(input: Types.CreatePropertyInput): Promise<Types.Property> {
   console.log(`Calling createProperty with input: ${JSON.stringify(input)}`);
 
@@ -42,3 +66,38 @@ export async function createProperty(input: Types.CreatePropertyInput): Promise<
     throw new Error('createProperty mutation failed');
   }
 }
+
+export async function updateProperty(input: Types.UpdatePropertyInput): Promise<Types.Property> {
+  console.log(`Calling updateProperty with input: ${JSON.stringify(input)}`);
+
+  const updateMutationVariables: Types.UpdatePropertyMutationVariables = { input };
+  const result: any = await API.graphql(graphqlOperation(updatePropertyMutation, updateMutationVariables));
+  if (result.data) {
+    const updateM: Types.UpdatePropertyMutation = result.data;
+    if (updateM.updateProperty) {
+      return updateM.updateProperty as Types.Property;
+    } else {
+      throw new Error('updateProperty mutation failed');
+    }
+  } else {
+    throw new Error('updateProperty mutation failed');
+  }
+}
+
+export async function deleteProperty(input: Types.DeletePropertyInput) {
+  console.log(`Calling deleteProperty with input: ${JSON.stringify(input)}`);
+
+  const deleteMutationVariables: Types.DeletePropertyMutationVariables = { input };
+  const result: any = await API.graphql(graphqlOperation(deletePropertyMutation, deleteMutationVariables));
+  if (result.data) {
+    const deleteM: Types.DeletePropertyMutation = result.data;
+    if (deleteM.deleteProperty) {
+      return deleteM.deleteProperty as Types.Property;
+    } else {
+      throw new Error('deleteProperty mutation failed');
+    }
+  } else {
+    throw new Error('deleteProperty mutation failed');
+  }
+}
+  
