@@ -1,7 +1,11 @@
 import Amplify from 'aws-amplify';
 import { StatusBar } from 'expo-status-bar';
+import * as React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import AppLoading from 'expo-app-loading';
 import {
   RecoilRoot,
@@ -13,6 +17,7 @@ import {
 import { listProperties } from './graphql';
 import { propertiesAtom } from './state';
 import PropertyList from './components/PropertyList';
+import PropertyPage from './components/PropertyPage';
 
 import config from './aws-exports';
 Amplify.configure(config);
@@ -33,21 +38,23 @@ const styles = StyleSheet.create({
   }
 });
 
-export const appReadyAtom = atom({
+const appReadyAtom = atom({
   key: 'appLoadingState',
   default: false,
 });
 
-function PropertyOrganizerApp() {
+const Stack = createNativeStackNavigator();
+
+function PropertyOrganizerApp({ navigation }: { navigation: any }) {
   const setProperties = useSetRecoilState(propertiesAtom);
   const [isReady, setIsReady] = useRecoilState(appReadyAtom);
 
-  if (!isReady) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <PropertyList />
+  return (
+    <View>
+      <PropertyList navigation={navigation} />
+      {!isReady && 
         <AppLoading
-          startAsync={ async () => {
+          startAsync={async () => {
             return new Promise(async (resolve, reject) => {
               console.log('In the promise');
               try {
@@ -64,16 +71,9 @@ function PropertyOrganizerApp() {
           }}
           onError={console.error}
         />
-        <StatusBar style="auto" />
-      </SafeAreaView>
-    );
-  }
+      }
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <PropertyList />
-      <StatusBar style="auto" />
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -81,7 +81,21 @@ export default function App() {
   return (
     <RecoilRoot>
       <PaperProvider theme={theme}>
-        <PropertyOrganizerApp />
+        <SafeAreaView style={styles.container}>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName='Home'>
+              <Stack.Screen
+                name='Home'
+                component={PropertyOrganizerApp}
+                options={{ title: 'Property Organizer' }} />
+              <Stack.Screen
+                name='PropertyPage'
+                component={PropertyPage}
+                options={{ title: 'Property' }} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SafeAreaView>
+        <StatusBar style='auto' />
       </PaperProvider>
     </RecoilRoot>
   );

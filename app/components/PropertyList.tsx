@@ -1,15 +1,13 @@
-import { IconButton, DataTable, Searchbar, ActivityIndicator } from 'react-native-paper';
+import { IconButton, DataTable, Searchbar } from 'react-native-paper';
 import { ScrollView, StyleSheet, View } from 'react-native';
+
 import {
   useRecoilState,
-  useRecoilValue,
-  useSetRecoilState,
 } from 'recoil';
 
 import {
   propertiesAtom,
   filterTextAtom,
-  // filteredPropertiesSelector,
 } from '../state';
 import { listProperties, createProperty } from '../graphql';
 import { ListingType, PropertyType, Property } from '../GraphQLAPI';
@@ -33,13 +31,13 @@ const style = StyleSheet.create({
   },
 });
 
-const PropertyList = () => {
+const PropertyList = ({ navigation }: { navigation: any}) => {
   const [properties, setProperties] = useRecoilState(propertiesAtom);
   const [filterText, setFilterText] = useRecoilState(filterTextAtom);
   const filteredProperties = properties.filter((property) => {
     return property.address.toLowerCase().includes(filterText.toLowerCase());
   });
-  console.log(`FILTERED PROPERTIES: ${JSON.stringify(filteredProperties)}`);
+  // console.log(`FILTERED PROPERTIES: ${JSON.stringify(filteredProperties)}`);
 
   return (
     <View style={style.container}>
@@ -90,10 +88,11 @@ const PropertyList = () => {
             <DataTable.Title>Specs</DataTable.Title>
             <DataTable.Title numeric>Price</DataTable.Title>
           </DataTable.Header>
-
           {
             filteredProperties.map(property => (
-              <DataTable.Row key={property.id}>
+              <DataTable.Row
+                key={property.id}
+                onPress={() => navigation.navigate('PropertyPage', { property })}>
                 <DataTable.Cell>{property.address}</DataTable.Cell>
                 <DataTable.Cell>{JSON.stringify(property.propertySpec)}</DataTable.Cell>
                 <DataTable.Cell numeric>{property.rentalInfo?.rentalPrice}</DataTable.Cell>

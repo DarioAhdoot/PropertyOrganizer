@@ -13,6 +13,10 @@ export const filterTextAtom = atom({
   key: 'filterTextState',
   default: '',
 });
+export const currentPropertyAtom = atom({
+  key: 'currentPropertyState',
+  default: null as Property | null,
+});
 
 // export const filteredPropertiesSelector = selector({
 //   key: 'filteredProperties',
