@@ -1,5 +1,6 @@
-import { IconButton, DataTable, Searchbar } from 'react-native-paper';
+import { DataTable, Searchbar } from 'react-native-paper';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { Button } from 'react-native-elements';
 
 import {
   useRecoilState,
@@ -9,8 +10,8 @@ import {
   propertiesAtom,
   filterTextAtom,
 } from '../state';
-import { listProperties, createProperty } from '../graphql';
-import { ListingType, PropertyType, Property } from '../GraphQLAPI';
+import { listProperties, createProperty } from '../GraphQLAPI';
+import { ListingType, PropertyType, Property } from '../API';
 
 const style = StyleSheet.create({
   container: {
@@ -31,7 +32,7 @@ const style = StyleSheet.create({
   },
 });
 
-const PropertyList = ({ navigation }: { navigation: any}) => {
+const PropertyList = ({ navigation }: { navigation: any }) => {
   const [properties, setProperties] = useRecoilState(propertiesAtom);
   const [filterText, setFilterText] = useRecoilState(filterTextAtom);
   const filteredProperties = properties.filter((property) => {
@@ -49,14 +50,19 @@ const PropertyList = ({ navigation }: { navigation: any}) => {
           style={style.searchBar}
           autoComplete={false}
         />
-        <IconButton
-          icon='filter'
-          size={20}
+        <Button
+          icon={{
+            name: 'filter',
+            type: 'font-awesome-5',
+            size: 20,
+            color: 'black',
+          }}
+          type='clear'
           onPress={async () => {
             setProperties(await listProperties());
           }}
         />
-        <IconButton
+        {/* <IconButton
           icon='plus'
           size={20}
           onPress={ async () => {
@@ -79,23 +85,62 @@ const PropertyList = ({ navigation }: { navigation: any}) => {
 
             setProperties(await listProperties());
           }}
-        />
+        /> */}
       </View>
       <ScrollView style={style.container}>
         <DataTable style={style.dataTable}>
           <DataTable.Header>
             <DataTable.Title>Address</DataTable.Title>
             <DataTable.Title>Specs</DataTable.Title>
-            <DataTable.Title numeric>Price</DataTable.Title>
+            <DataTable.Title numeric style={{ width: 100 }}>Price</DataTable.Title>
+            <DataTable.Title>Ops</DataTable.Title>
           </DataTable.Header>
           {
             filteredProperties.map(property => (
               <DataTable.Row
                 key={property.id}
-                onPress={() => navigation.navigate('PropertyPage', { property })}>
+                onPress={() => navigation.navigate('PropertyDetail', { property })}>
                 <DataTable.Cell>{property.address}</DataTable.Cell>
                 <DataTable.Cell>{JSON.stringify(property.propertySpec)}</DataTable.Cell>
                 <DataTable.Cell numeric>{property.rentalInfo?.rentalPrice}</DataTable.Cell>
+                <DataTable.Cell>
+                  <Button
+                    icon={{
+                      name: 'pen',
+                      type: 'font-awesome-5',
+                      size: 16,
+                      color: 'black',
+                    }}
+                    type='clear'
+                  // onPress={async () => {
+                  //   setProperties(await listProperties());
+                  // }}
+                  />
+                  <Button
+                    icon={{
+                      name: 'trash',
+                      type: 'font-awesome-5',
+                      size: 16,
+                      color: 'black',
+                    }}
+                    type='clear'
+                  // onPress={async () => {
+                  //   setProperties(await listProperties());
+                  // }}
+                  />
+                  <Button
+                    icon={{
+                      name: 'share-alt',
+                      type: 'font-awesome-5',
+                      size: 16,
+                      color: 'black',
+                    }}
+                    type='clear'
+                  // onPress={async () => {
+                  //   setProperties(await listProperties());
+                  // }}
+                  />
+                </DataTable.Cell>
               </DataTable.Row>
             ))
           }

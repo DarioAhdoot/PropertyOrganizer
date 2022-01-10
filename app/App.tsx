@@ -14,10 +14,10 @@ import {
   useSetRecoilState,
 } from 'recoil';
 
-import { listProperties } from './graphql';
+import { listProperties } from './GraphQLAPI';
 import { propertiesAtom } from './state';
 import PropertyList from './components/PropertyList';
-import PropertyPage from './components/PropertyPage';
+import PropertyDetail from './components/PropertyDetail';
 
 import config from './aws-exports';
 Amplify.configure(config);
@@ -89,8 +89,8 @@ export default function App() {
                 component={PropertyOrganizerApp}
                 options={{ title: 'Property Organizer' }} />
               <Stack.Screen
-                name='PropertyPage'
-                component={PropertyPage}
+                name='PropertyDetail'
+                component={PropertyDetail}
                 options={{ title: 'Property' }} />
             </Stack.Navigator>
           </NavigationContainer>

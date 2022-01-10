@@ -11,8 +11,6 @@ enum PropertyType {
   house
   apartment
   loft
-  trailer
-  shack
 }
 
 type PropertySpec {
@@ -23,7 +21,10 @@ type PropertySpec {
   diningRoom: Boolean
   balcony: Boolean
   patio: Boolean
+  floor: Int
+  lift: Boolean
   floors: Int
+  parking: Boolean
 }
 
 type PurchaseInfo {
@@ -33,6 +34,15 @@ type PurchaseInfo {
 type RentalInfo {
   rentalPrice: Int
   utilities: Int
+  leaseLength: Int
+  parkingPrice: Int
+  furnished: Boolean
+  washer: Boolean
+  dryer: Boolean
+  dishwasher: Boolean
+  ac: Boolean
+  heat: Boolean
+  pets: Boolean
 }
 
 type Property @model {
@@ -40,10 +50,14 @@ type Property @model {
   address: String!
   addressUrl: String
   listingUrl: String
-  imageUrls: [String]
-  videoUrls: [String]
+  imageUrls: [String!]
+  videoUrls: [String!]
   propertySpec: PropertySpec!
   listingType: ListingType!
   rentalInfo: RentalInfo
   purchaseInfo: PurchaseInfo
+  contactName: String
+  contactPhone: String
+  contactEmail: String
+  notes: String
 }

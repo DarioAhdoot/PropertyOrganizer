@@ -19,16 +19,32 @@ export const onCreateProperty = /* GraphQL */ `
         diningRoom
         balcony
         patio
+        floor
+        lift
         floors
+        parking
       }
       listingType
       rentalInfo {
         rentalPrice
         utilities
+        leaseLength
+        parkingPrice
+        furnished
+        washer
+        dryer
+        dishwasher
+        ac
+        heat
+        pets
       }
       purchaseInfo {
         askingPrice
       }
+      contactName
+      contactPhone
+      contactEmail
+      notes
       createdAt
       updatedAt
       _version
@@ -54,16 +70,32 @@ export const onUpdateProperty = /* GraphQL */ `
         diningRoom
         balcony
         patio
+        floor
+        lift
         floors
+        parking
       }
       listingType
       rentalInfo {
         rentalPrice
         utilities
+        leaseLength
+        parkingPrice
+        furnished
+        washer
+        dryer
+        dishwasher
+        ac
+        heat
+        pets
       }
       purchaseInfo {
         askingPrice
       }
+      contactName
+      contactPhone
+      contactEmail
+      notes
       createdAt
       updatedAt
       _version
@@ -89,16 +121,32 @@ export const onDeleteProperty = /* GraphQL */ `
         diningRoom
         balcony
         patio
+        floor
+        lift
         floors
+        parking
       }
       listingType
       rentalInfo {
         rentalPrice
         utilities
+        leaseLength
+        parkingPrice
+        furnished
+        washer
+        dryer
+        dishwasher
+        ac
+        heat
+        pets
       }
       purchaseInfo {
         askingPrice
       }
+      contactName
+      contactPhone
+      contactEmail
+      notes
       createdAt
       updatedAt
       _version
