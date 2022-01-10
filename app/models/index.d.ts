@@ -23,6 +23,11 @@ export declare class PropertySpec {
   readonly lift?: boolean;
   readonly floors?: number;
   readonly parking?: boolean;
+  readonly washer?: boolean;
+  readonly dryer?: boolean;
+  readonly dishwasher?: boolean;
+  readonly ac?: boolean;
+  readonly heat?: boolean;
   constructor(init: ModelInit<PropertySpec>);
 }
 
@@ -37,11 +42,6 @@ export declare class RentalInfo {
   readonly leaseLength?: number;
   readonly parkingPrice?: number;
   readonly furnished?: boolean;
-  readonly washer?: boolean;
-  readonly dryer?: boolean;
-  readonly dishwasher?: boolean;
-  readonly ac?: boolean;
-  readonly heat?: boolean;
   readonly pets?: boolean;
   constructor(init: ModelInit<RentalInfo>);
 }
@@ -52,6 +52,7 @@ type PropertyMetaData = {
 
 export declare class Property {
   readonly id: string;
+  readonly title: string;
   readonly address: string;
   readonly addressUrl?: string;
   readonly listingUrl?: string;

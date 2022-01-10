@@ -1,9 +1,16 @@
 import { Component, ReactNode } from 'react';
-import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
-import { Button, Icon } from 'react-native-elements';
+import { Dimensions, Image, StyleSheet, Text, View, FlatList } from 'react-native';
+import { Button } from 'react-native-elements';
+import { Headline, Subheading } from 'react-native-paper';
+import Icon from '@mdi/react'
+import {
+  mdiCurrencyEur,
+  mdiAirConditioner,
+  mdiDogSide,
+ } from '@mdi/js'
 import SwiperFlatList from 'react-native-swiper-flatlist';
 import * as Linking from 'expo-linking';
-import { Property, RentalInfo } from '../API';
+import { Property, PropertySpec, RentalInfo } from '../models';
 import _ from 'lodash';
 
 const { width, height } = Dimensions.get('window');
@@ -15,10 +22,15 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     width: 24,
-    height: 24
-  }
+    height: 24,
+    margin: 4,
+  },
 });
 
+
+type PropertyProps = {
+  property: Property
+}
 
 class PropertyDetail extends Component {
   property: Property
@@ -34,16 +46,16 @@ class PropertyDetail extends Component {
   }
 
   render(): ReactNode {
-
     const rentalInfo = this.property.rentalInfo;
 
     return (
       <View>
         <ImageSwiper imageUrls={this.property.imageUrls} />
-        <PropertyInfoTable property={this.property} />
-        <ContactInfoTable contactEmail={this.property.contactEmail} contactName={this.property.contactName} contactPhone={this.property.contactPhone} />
+        <Headline style={{ minHeight: 30 }}>{this.property.title}</Headline>
+        <LinksTable property={this.property} />
 
-        {rentalInfo ? <RentalInfoTable rentalInfo={rentalInfo} /> : null }
+        {rentalInfo ? <RentalInfoTable rentalInfo={rentalInfo} /> : null}
+        <PropertySpecSection property={this.property} />
       </View>
     )
   }
@@ -53,15 +65,13 @@ type ImageUrlsProps = {
   imageUrls?: string[] | null
 }
 
-const ImageSwiper: React.FunctionComponent<ImageUrlsProps> = ({
-  imageUrls
-}) => {
+const ImageSwiper: React.FunctionComponent<ImageUrlsProps> = ({imageUrls}) => {
   const items = imageUrls ? imageUrls.map((imageUrl) => {
     return {
       url: imageUrl,
     };
   }) : [{ url: require('../assets/no-image.jpg') }];
-  
+
   return (
     <SwiperFlatList
       index={0}
@@ -71,22 +81,17 @@ const ImageSwiper: React.FunctionComponent<ImageUrlsProps> = ({
   );
 }
 
-type PropertyInfoProps = {
-  property: Property
-}
-
-const PropertyInfoTable: React.FunctionComponent<PropertyInfoProps> = ({
-  property,
-}) => {
-
+const LinksTable: React.FunctionComponent<PropertyProps> = ({property}) => {
   const hasListingUrl = !_.isNil(property.listingUrl) && !_.isEmpty(property.listingUrl);
   const hasAddressUrl = !_.isNil(property.addressUrl) && !_.isEmpty(property.addressUrl);
   const hasVideoUrls = !_.isNil(property.addressUrl) && !_.isEmpty(property.addressUrl);
+  const hasContactPhone = !_.isNil(property.contactPhone) && !_.isEmpty(property.contactPhone);
+  const hasContactEmail = !_.isNil(property.contactEmail) && !_.isEmpty(property.contactEmail);
 
   return (
-    <View style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'row' }}>
+    <View style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'row', minHeight: 40 }}>
       <Button
-        style={ styles.iconButton }
+        style={styles.iconButton}
         icon={{
           name: 'home',
           type: 'font-awesome-5',
@@ -110,7 +115,11 @@ const PropertyInfoTable: React.FunctionComponent<PropertyInfoProps> = ({
         onPress={() => Linking.openURL(property.addressUrl!)}>
       </Button>
       <Button
-        style={styles.iconButton}
+        style={{
+          ...styles.iconButton,
+          flexBasis: 'auto',
+          flexGrow: 1,
+        }}
         icon={{
           name: 'video',
           type: 'font-awesome-5',
@@ -121,30 +130,11 @@ const PropertyInfoTable: React.FunctionComponent<PropertyInfoProps> = ({
         disabled={!hasVideoUrls}
         onPress={() => Linking.openURL(property.videoUrls![0])}>
       </Button>
-    </View>
-
-  );
-}
-
-type ContactInfoProps = {
-  contactName?: string | null;
-  contactEmail?: string | null;
-  contactPhone?: string | null;
-}
-
-const ContactInfoTable: React.FunctionComponent<ContactInfoProps> = ({contactName, contactEmail, contactPhone}) => {
-
-  const hasContactPhone = !_.isNil(contactPhone) && !_.isEmpty(contactPhone);
-  const hasContactEmail = !_.isNil(contactEmail) && !_.isEmpty(contactEmail);
-  return (
-    <View style={{ flexDirection: "row" }}>
-      <Text style={{
-        flexBasis: 'auto',
-        flexGrow: 1,
-      }}>
-        {contactName || ''}
+      <Text>
+        Contact: {property.contactName || ''}
       </Text>
       <Button
+        style={styles.iconButton}
         icon={{
           name: 'phone',
           type: 'font-awesome-5',
@@ -153,9 +143,10 @@ const ContactInfoTable: React.FunctionComponent<ContactInfoProps> = ({contactNam
         }}
         type='clear'
         disabled={!hasContactPhone}
-        onPress={() => Linking.openURL(`phone:${contactPhone}`)}>
+        onPress={() => Linking.openURL(`phone:${property.contactPhone}`)}>
       </Button>
       <Button
+        style={styles.iconButton}
         icon={{
           name: 'envelope',
           type: 'font-awesome-5',
@@ -164,35 +155,69 @@ const ContactInfoTable: React.FunctionComponent<ContactInfoProps> = ({contactNam
         }}
         type='clear'
         disabled={!hasContactEmail}
-        onPress={() => Linking.openURL(`phone:${contactEmail}`)}>
+        onPress={() => Linking.openURL(`phone:${property.contactEmail}`)}>
       </Button>
     </View>
+  );
+}
 
+type RentalInfoProps = {
+  rentalInfo: RentalInfo
+}
+const RentalInfoTable: React.FunctionComponent<RentalInfoProps> = ({ rentalInfo }) => {
+  
+  return (
+    <View>
+      <Subheading>Rental Info</Subheading>
+      <Text>Rent: {rentalInfo.rentalPrice || '?'} €/month</Text>
+      <Text>Utilities: {rentalInfo.utilities || '?'} €/month</Text>
+      <Text>Parking: {rentalInfo.parkingPrice || '?'} €/month</Text>
+      <Text>Lease Length: {rentalInfo.leaseLength || '?'} months</Text>
+      <Text>Furnished: {rentalInfo.furnished ? 'Yes' : (rentalInfo.furnished === false ? 'No' : '?')}</Text>
+      <Text>Pets: {rentalInfo.pets ? 'Yes' : (rentalInfo.pets === false ? 'No' : '?')}</Text>
+    </View>
+  );
+
+  const data = [
+    { rentalPrice: rentalInfo.rentalPrice },
+    { utilities: rentalInfo.utilities },
+    { leaseLength: rentalInfo.leaseLength },
+    { parkingPrice: rentalInfo.parkingPrice },
+    { furnished: rentalInfo.furnished },
+    { pets: rentalInfo.pets },
+  ];
+
+  const renderItem = ({ item }: { item: any}) => {
+    return (
+      <View>
+        <Icon
+          path={mdiAirConditioner}
+          size={1}
+        ></Icon>
+      </View>
+    );
+  };
+
+  return (
+    <FlatList 
+      data={Object.entries(rentalInfo)}
+      renderItem={renderItem}
+      numColumns={2}
+      keyExtractor={(item) => item[0]}>
+    </FlatList>
   );
 };
 
-type RentalInfoTableProps = {
-  rentalInfo: RentalInfo;
-};
-
-const RentalInfoTable: React.FunctionComponent<RentalInfoTableProps> = ({
-  rentalInfo,
-}) => {
+const PropertySpecSection: React.FunctionComponent<PropertyProps> = ({property}) => {
+  const spec = property.propertySpec;
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <View style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'row' }}>
-        <Text style={{ flex: 1, alignSelf: 'stretch' }} >Rent</Text>
-        <Text style={{ flex: 1, alignSelf: 'stretch' }} >Utilities</Text>
-        <Text style={{ flex: 1, alignSelf: 'stretch' }} >Lease Length</Text>
-        <Text style={{ flex: 1, alignSelf: 'stretch' }} >Parking Price</Text>
-      </View>
-      <View style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'row' }}>
-        <Text style={{ flex: 1, alignSelf: 'stretch' }} >{`${rentalInfo.rentalPrice ?? ''}`}</Text>
-        <Text style={{ flex: 1, alignSelf: 'stretch' }} >{`${rentalInfo.utilities ?? ''}`}</Text>
-        <Text style={{ flex: 1, alignSelf: 'stretch' }} >{`${rentalInfo.leaseLength ?? ''}`}</Text>
-        <Text style={{ flex: 1, alignSelf: 'stretch' }} >{`${rentalInfo.parkingPrice ?? ''}`}</Text>
-      </View>
+    <View>
+      <Subheading>Specs:</Subheading>
+      <Text>Type: {spec.propertyType}</Text>
+      <Text>Bedrooms: {spec.bedrooms || '?'}</Text>
+      <Text>Bathrooms: {spec.bathrooms || '?'}</Text>
+      <Text>Area: {spec.area || '?'}m²</Text>
     </View>
   );
 };

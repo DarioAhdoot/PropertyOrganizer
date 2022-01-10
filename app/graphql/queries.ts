@@ -6,6 +6,7 @@ export const getProperty = /* GraphQL */ `
   query GetProperty($id: ID!) {
     getProperty(id: $id) {
       id
+      title
       address
       addressUrl
       listingUrl
@@ -23,6 +24,11 @@ export const getProperty = /* GraphQL */ `
         lift
         floors
         parking
+        washer
+        dryer
+        dishwasher
+        ac
+        heat
       }
       listingType
       rentalInfo {
@@ -31,11 +37,6 @@ export const getProperty = /* GraphQL */ `
         leaseLength
         parkingPrice
         furnished
-        washer
-        dryer
-        dishwasher
-        ac
-        heat
         pets
       }
       purchaseInfo {
@@ -62,6 +63,7 @@ export const listProperties = /* GraphQL */ `
     listProperties(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        title
         address
         addressUrl
         listingUrl
@@ -79,6 +81,11 @@ export const listProperties = /* GraphQL */ `
           lift
           floors
           parking
+          washer
+          dryer
+          dishwasher
+          ac
+          heat
         }
         listingType
         rentalInfo {
@@ -87,11 +94,6 @@ export const listProperties = /* GraphQL */ `
           leaseLength
           parkingPrice
           furnished
-          washer
-          dryer
-          dishwasher
-          ac
-          heat
           pets
         }
         purchaseInfo {
@@ -127,6 +129,7 @@ export const syncProperties = /* GraphQL */ `
     ) {
       items {
         id
+        title
         address
         addressUrl
         listingUrl
@@ -144,6 +147,11 @@ export const syncProperties = /* GraphQL */ `
           lift
           floors
           parking
+          washer
+          dryer
+          dishwasher
+          ac
+          heat
         }
         listingType
         rentalInfo {
@@ -152,11 +160,6 @@ export const syncProperties = /* GraphQL */ `
           leaseLength
           parkingPrice
           furnished
-          washer
-          dryer
-          dishwasher
-          ac
-          heat
           pets
         }
         purchaseInfo {

@@ -25,6 +25,7 @@ Amplify.configure(config);
 const theme = {
   ...DefaultTheme,
   roundness: 2,
+  mode: 'adaptive',
   colors: {
     ...DefaultTheme.colors,
     primary: '#3498db',

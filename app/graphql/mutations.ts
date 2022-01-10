@@ -9,6 +9,7 @@ export const createProperty = /* GraphQL */ `
   ) {
     createProperty(input: $input, condition: $condition) {
       id
+      title
       address
       addressUrl
       listingUrl
@@ -26,6 +27,11 @@ export const createProperty = /* GraphQL */ `
         lift
         floors
         parking
+        washer
+        dryer
+        dishwasher
+        ac
+        heat
       }
       listingType
       rentalInfo {
@@ -34,11 +40,6 @@ export const createProperty = /* GraphQL */ `
         leaseLength
         parkingPrice
         furnished
-        washer
-        dryer
-        dishwasher
-        ac
-        heat
         pets
       }
       purchaseInfo {
@@ -63,6 +64,7 @@ export const updateProperty = /* GraphQL */ `
   ) {
     updateProperty(input: $input, condition: $condition) {
       id
+      title
       address
       addressUrl
       listingUrl
@@ -80,6 +82,11 @@ export const updateProperty = /* GraphQL */ `
         lift
         floors
         parking
+        washer
+        dryer
+        dishwasher
+        ac
+        heat
       }
       listingType
       rentalInfo {
@@ -88,11 +95,6 @@ export const updateProperty = /* GraphQL */ `
         leaseLength
         parkingPrice
         furnished
-        washer
-        dryer
-        dishwasher
-        ac
-        heat
         pets
       }
       purchaseInfo {
@@ -117,6 +119,7 @@ export const deleteProperty = /* GraphQL */ `
   ) {
     deleteProperty(input: $input, condition: $condition) {
       id
+      title
       address
       addressUrl
       listingUrl
@@ -134,6 +137,11 @@ export const deleteProperty = /* GraphQL */ `
         lift
         floors
         parking
+        washer
+        dryer
+        dishwasher
+        ac
+        heat
       }
       listingType
       rentalInfo {
@@ -142,11 +150,6 @@ export const deleteProperty = /* GraphQL */ `
         leaseLength
         parkingPrice
         furnished
-        washer
-        dryer
-        dishwasher
-        ac
-        heat
         pets
       }
       purchaseInfo {

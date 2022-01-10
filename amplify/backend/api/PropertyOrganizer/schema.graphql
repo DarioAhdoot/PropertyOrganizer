@@ -25,6 +25,11 @@ type PropertySpec {
   lift: Boolean
   floors: Int
   parking: Boolean
+  washer: Boolean
+  dryer: Boolean
+  dishwasher: Boolean
+  ac: Boolean
+  heat: Boolean
 }
 
 type PurchaseInfo {
@@ -37,16 +42,12 @@ type RentalInfo {
   leaseLength: Int
   parkingPrice: Int
   furnished: Boolean
-  washer: Boolean
-  dryer: Boolean
-  dishwasher: Boolean
-  ac: Boolean
-  heat: Boolean
   pets: Boolean
 }
 
 type Property @model {
   id: ID!
+  title: String!
   address: String!
   addressUrl: String
   listingUrl: String

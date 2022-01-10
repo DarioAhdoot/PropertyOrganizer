@@ -10,6 +10,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "title": {
+                    "name": "title",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "address": {
                     "name": "address",
                     "isArray": false,
@@ -237,6 +244,41 @@ export const schema = {
                     "type": "Boolean",
                     "isRequired": false,
                     "attributes": []
+                },
+                "washer": {
+                    "name": "washer",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "dryer": {
+                    "name": "dryer",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "dishwasher": {
+                    "name": "dishwasher",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "ac": {
+                    "name": "ac",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "heat": {
+                    "name": "heat",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
                 }
             }
         },
@@ -290,41 +332,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "washer": {
-                    "name": "washer",
-                    "isArray": false,
-                    "type": "Boolean",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "dryer": {
-                    "name": "dryer",
-                    "isArray": false,
-                    "type": "Boolean",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "dishwasher": {
-                    "name": "dishwasher",
-                    "isArray": false,
-                    "type": "Boolean",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "ac": {
-                    "name": "ac",
-                    "isArray": false,
-                    "type": "Boolean",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "heat": {
-                    "name": "heat",
-                    "isArray": false,
-                    "type": "Boolean",
-                    "isRequired": false,
-                    "attributes": []
-                },
                 "pets": {
                     "name": "pets",
                     "isArray": false,
@@ -335,5 +342,5 @@ export const schema = {
             }
         }
     },
-    "version": "816d5d733fedeece6c307ff4fd22244e"
+    "version": "fd37f386aafcc3c22078404e9c1056e3"
 };

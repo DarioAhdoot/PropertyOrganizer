@@ -4,6 +4,7 @@
 
 export type CreatePropertyInput = {
   id?: string | null,
+  title: string,
   address: string,
   addressUrl?: string | null,
   listingUrl?: string | null,
@@ -32,6 +33,11 @@ export type PropertySpecInput = {
   lift?: boolean | null,
   floors?: number | null,
   parking?: boolean | null,
+  washer?: boolean | null,
+  dryer?: boolean | null,
+  dishwasher?: boolean | null,
+  ac?: boolean | null,
+  heat?: boolean | null,
 };
 
 export enum PropertyType {
@@ -53,11 +59,6 @@ export type RentalInfoInput = {
   leaseLength?: number | null,
   parkingPrice?: number | null,
   furnished?: boolean | null,
-  washer?: boolean | null,
-  dryer?: boolean | null,
-  dishwasher?: boolean | null,
-  ac?: boolean | null,
-  heat?: boolean | null,
   pets?: boolean | null,
 };
 
@@ -66,6 +67,7 @@ export type PurchaseInfoInput = {
 };
 
 export type ModelPropertyConditionInput = {
+  title?: ModelStringInput | null,
   address?: ModelStringInput | null,
   addressUrl?: ModelStringInput | null,
   listingUrl?: ModelStringInput | null,
@@ -129,6 +131,7 @@ export type ModelListingTypeInput = {
 export type Property = {
   __typename: "Property",
   id: string,
+  title: string,
   address: string,
   addressUrl?: string | null,
   listingUrl?: string | null,
@@ -162,6 +165,11 @@ export type PropertySpec = {
   lift?: boolean | null,
   floors?: number | null,
   parking?: boolean | null,
+  washer?: boolean | null,
+  dryer?: boolean | null,
+  dishwasher?: boolean | null,
+  ac?: boolean | null,
+  heat?: boolean | null,
 };
 
 export type RentalInfo = {
@@ -171,11 +179,6 @@ export type RentalInfo = {
   leaseLength?: number | null,
   parkingPrice?: number | null,
   furnished?: boolean | null,
-  washer?: boolean | null,
-  dryer?: boolean | null,
-  dishwasher?: boolean | null,
-  ac?: boolean | null,
-  heat?: boolean | null,
   pets?: boolean | null,
 };
 
@@ -186,6 +189,7 @@ export type PurchaseInfo = {
 
 export type UpdatePropertyInput = {
   id: string,
+  title?: string | null,
   address?: string | null,
   addressUrl?: string | null,
   listingUrl?: string | null,
@@ -209,6 +213,7 @@ export type DeletePropertyInput = {
 
 export type ModelPropertyFilterInput = {
   id?: ModelIDInput | null,
+  title?: ModelStringInput | null,
   address?: ModelStringInput | null,
   addressUrl?: ModelStringInput | null,
   listingUrl?: ModelStringInput | null,
@@ -256,6 +261,7 @@ export type CreatePropertyMutation = {
   createProperty?:  {
     __typename: "Property",
     id: string,
+    title: string,
     address: string,
     addressUrl?: string | null,
     listingUrl?: string | null,
@@ -274,6 +280,11 @@ export type CreatePropertyMutation = {
       lift?: boolean | null,
       floors?: number | null,
       parking?: boolean | null,
+      washer?: boolean | null,
+      dryer?: boolean | null,
+      dishwasher?: boolean | null,
+      ac?: boolean | null,
+      heat?: boolean | null,
     },
     listingType: ListingType,
     rentalInfo?:  {
@@ -283,11 +294,6 @@ export type CreatePropertyMutation = {
       leaseLength?: number | null,
       parkingPrice?: number | null,
       furnished?: boolean | null,
-      washer?: boolean | null,
-      dryer?: boolean | null,
-      dishwasher?: boolean | null,
-      ac?: boolean | null,
-      heat?: boolean | null,
       pets?: boolean | null,
     } | null,
     purchaseInfo?:  {
@@ -315,6 +321,7 @@ export type UpdatePropertyMutation = {
   updateProperty?:  {
     __typename: "Property",
     id: string,
+    title: string,
     address: string,
     addressUrl?: string | null,
     listingUrl?: string | null,
@@ -333,6 +340,11 @@ export type UpdatePropertyMutation = {
       lift?: boolean | null,
       floors?: number | null,
       parking?: boolean | null,
+      washer?: boolean | null,
+      dryer?: boolean | null,
+      dishwasher?: boolean | null,
+      ac?: boolean | null,
+      heat?: boolean | null,
     },
     listingType: ListingType,
     rentalInfo?:  {
@@ -342,11 +354,6 @@ export type UpdatePropertyMutation = {
       leaseLength?: number | null,
       parkingPrice?: number | null,
       furnished?: boolean | null,
-      washer?: boolean | null,
-      dryer?: boolean | null,
-      dishwasher?: boolean | null,
-      ac?: boolean | null,
-      heat?: boolean | null,
       pets?: boolean | null,
     } | null,
     purchaseInfo?:  {
@@ -374,6 +381,7 @@ export type DeletePropertyMutation = {
   deleteProperty?:  {
     __typename: "Property",
     id: string,
+    title: string,
     address: string,
     addressUrl?: string | null,
     listingUrl?: string | null,
@@ -392,6 +400,11 @@ export type DeletePropertyMutation = {
       lift?: boolean | null,
       floors?: number | null,
       parking?: boolean | null,
+      washer?: boolean | null,
+      dryer?: boolean | null,
+      dishwasher?: boolean | null,
+      ac?: boolean | null,
+      heat?: boolean | null,
     },
     listingType: ListingType,
     rentalInfo?:  {
@@ -401,11 +414,6 @@ export type DeletePropertyMutation = {
       leaseLength?: number | null,
       parkingPrice?: number | null,
       furnished?: boolean | null,
-      washer?: boolean | null,
-      dryer?: boolean | null,
-      dishwasher?: boolean | null,
-      ac?: boolean | null,
-      heat?: boolean | null,
       pets?: boolean | null,
     } | null,
     purchaseInfo?:  {
@@ -432,6 +440,7 @@ export type GetPropertyQuery = {
   getProperty?:  {
     __typename: "Property",
     id: string,
+    title: string,
     address: string,
     addressUrl?: string | null,
     listingUrl?: string | null,
@@ -450,6 +459,11 @@ export type GetPropertyQuery = {
       lift?: boolean | null,
       floors?: number | null,
       parking?: boolean | null,
+      washer?: boolean | null,
+      dryer?: boolean | null,
+      dishwasher?: boolean | null,
+      ac?: boolean | null,
+      heat?: boolean | null,
     },
     listingType: ListingType,
     rentalInfo?:  {
@@ -459,11 +473,6 @@ export type GetPropertyQuery = {
       leaseLength?: number | null,
       parkingPrice?: number | null,
       furnished?: boolean | null,
-      washer?: boolean | null,
-      dryer?: boolean | null,
-      dishwasher?: boolean | null,
-      ac?: boolean | null,
-      heat?: boolean | null,
       pets?: boolean | null,
     } | null,
     purchaseInfo?:  {
@@ -494,6 +503,7 @@ export type ListPropertiesQuery = {
     items:  Array< {
       __typename: "Property",
       id: string,
+      title: string,
       address: string,
       addressUrl?: string | null,
       listingUrl?: string | null,
@@ -512,6 +522,11 @@ export type ListPropertiesQuery = {
         lift?: boolean | null,
         floors?: number | null,
         parking?: boolean | null,
+        washer?: boolean | null,
+        dryer?: boolean | null,
+        dishwasher?: boolean | null,
+        ac?: boolean | null,
+        heat?: boolean | null,
       },
       listingType: ListingType,
       rentalInfo?:  {
@@ -521,11 +536,6 @@ export type ListPropertiesQuery = {
         leaseLength?: number | null,
         parkingPrice?: number | null,
         furnished?: boolean | null,
-        washer?: boolean | null,
-        dryer?: boolean | null,
-        dishwasher?: boolean | null,
-        ac?: boolean | null,
-        heat?: boolean | null,
         pets?: boolean | null,
       } | null,
       purchaseInfo?:  {
@@ -560,6 +570,7 @@ export type SyncPropertiesQuery = {
     items:  Array< {
       __typename: "Property",
       id: string,
+      title: string,
       address: string,
       addressUrl?: string | null,
       listingUrl?: string | null,
@@ -578,6 +589,11 @@ export type SyncPropertiesQuery = {
         lift?: boolean | null,
         floors?: number | null,
         parking?: boolean | null,
+        washer?: boolean | null,
+        dryer?: boolean | null,
+        dishwasher?: boolean | null,
+        ac?: boolean | null,
+        heat?: boolean | null,
       },
       listingType: ListingType,
       rentalInfo?:  {
@@ -587,11 +603,6 @@ export type SyncPropertiesQuery = {
         leaseLength?: number | null,
         parkingPrice?: number | null,
         furnished?: boolean | null,
-        washer?: boolean | null,
-        dryer?: boolean | null,
-        dishwasher?: boolean | null,
-        ac?: boolean | null,
-        heat?: boolean | null,
         pets?: boolean | null,
       } | null,
       purchaseInfo?:  {
@@ -617,6 +628,7 @@ export type OnCreatePropertySubscription = {
   onCreateProperty?:  {
     __typename: "Property",
     id: string,
+    title: string,
     address: string,
     addressUrl?: string | null,
     listingUrl?: string | null,
@@ -635,6 +647,11 @@ export type OnCreatePropertySubscription = {
       lift?: boolean | null,
       floors?: number | null,
       parking?: boolean | null,
+      washer?: boolean | null,
+      dryer?: boolean | null,
+      dishwasher?: boolean | null,
+      ac?: boolean | null,
+      heat?: boolean | null,
     },
     listingType: ListingType,
     rentalInfo?:  {
@@ -644,11 +661,6 @@ export type OnCreatePropertySubscription = {
       leaseLength?: number | null,
       parkingPrice?: number | null,
       furnished?: boolean | null,
-      washer?: boolean | null,
-      dryer?: boolean | null,
-      dishwasher?: boolean | null,
-      ac?: boolean | null,
-      heat?: boolean | null,
       pets?: boolean | null,
     } | null,
     purchaseInfo?:  {
@@ -671,6 +683,7 @@ export type OnUpdatePropertySubscription = {
   onUpdateProperty?:  {
     __typename: "Property",
     id: string,
+    title: string,
     address: string,
     addressUrl?: string | null,
     listingUrl?: string | null,
@@ -689,6 +702,11 @@ export type OnUpdatePropertySubscription = {
       lift?: boolean | null,
       floors?: number | null,
       parking?: boolean | null,
+      washer?: boolean | null,
+      dryer?: boolean | null,
+      dishwasher?: boolean | null,
+      ac?: boolean | null,
+      heat?: boolean | null,
     },
     listingType: ListingType,
     rentalInfo?:  {
@@ -698,11 +716,6 @@ export type OnUpdatePropertySubscription = {
       leaseLength?: number | null,
       parkingPrice?: number | null,
       furnished?: boolean | null,
-      washer?: boolean | null,
-      dryer?: boolean | null,
-      dishwasher?: boolean | null,
-      ac?: boolean | null,
-      heat?: boolean | null,
       pets?: boolean | null,
     } | null,
     purchaseInfo?:  {
@@ -725,6 +738,7 @@ export type OnDeletePropertySubscription = {
   onDeleteProperty?:  {
     __typename: "Property",
     id: string,
+    title: string,
     address: string,
     addressUrl?: string | null,
     listingUrl?: string | null,
@@ -743,6 +757,11 @@ export type OnDeletePropertySubscription = {
       lift?: boolean | null,
       floors?: number | null,
       parking?: boolean | null,
+      washer?: boolean | null,
+      dryer?: boolean | null,
+      dishwasher?: boolean | null,
+      ac?: boolean | null,
+      heat?: boolean | null,
     },
     listingType: ListingType,
     rentalInfo?:  {
@@ -752,11 +771,6 @@ export type OnDeletePropertySubscription = {
       leaseLength?: number | null,
       parkingPrice?: number | null,
       furnished?: boolean | null,
-      washer?: boolean | null,
-      dryer?: boolean | null,
-      dishwasher?: boolean | null,
-      ac?: boolean | null,
-      heat?: boolean | null,
       pets?: boolean | null,
     } | null,
     purchaseInfo?:  {
