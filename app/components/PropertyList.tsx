@@ -2,6 +2,8 @@ import { DataTable, Searchbar } from 'react-native-paper';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button } from 'react-native-elements';
 
+import fetch from 'isomorphic-fetch';
+
 import {
   useRecoilState,
 } from 'recoil';
@@ -11,7 +13,7 @@ import {
   filterTextAtom,
 } from '../state';
 import { listProperties, createProperty } from '../GraphQLAPI';
-import { ListingType, PropertyType, Property } from '../API';
+import { ListingType, PropertyType, Property } from '../models'; 
 
 const style = StyleSheet.create({
   container: {
@@ -58,8 +60,9 @@ const PropertyList = ({ navigation }: { navigation: any }) => {
             color: 'black',
           }}
           type='clear'
-          onPress={async () => {
-            setProperties(await listProperties());
+          onPress={ async () => {
+            navigation.navigate('PropertyAddUpdate')
+            // setProperties(await listProperties());
           }}
         />
         {/* <IconButton

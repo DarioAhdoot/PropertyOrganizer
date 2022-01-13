@@ -18,6 +18,7 @@ import { listProperties } from './GraphQLAPI';
 import { propertiesAtom } from './state';
 import PropertyList from './components/PropertyList';
 import PropertyDetail from './components/PropertyDetail';
+import PropertyAddUpdate from './components/PropertyAddUpdate';
 
 import config from './aws-exports';
 Amplify.configure(config);
@@ -90,8 +91,10 @@ export default function App() {
                 options={{ title: 'Property Organizer' }} />
               <Stack.Screen
                 name='PropertyDetail'
-                component={PropertyDetail}
-                options={{ title: 'Property' }} />
+                component={PropertyDetail} />
+              <Stack.Screen
+                name='PropertyAddUpdate'
+                component={PropertyAddUpdate} />
             </Stack.Navigator>
           </NavigationContainer>
         </SafeAreaView>
