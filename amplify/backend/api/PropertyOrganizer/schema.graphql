@@ -18,12 +18,12 @@ type PropertySpec {
   bedrooms: Int
   bathrooms: Int
   area: Int
+  floor: Int
+  floors: Int
   diningRoom: Boolean
   balcony: Boolean
   patio: Boolean
-  floor: Int
   lift: Boolean
-  floors: Int
   parking: Boolean
   washer: Boolean
   dryer: Boolean
