@@ -73,11 +73,18 @@ const PropertyAddUpdate = ({ navigation }: { navigation: any }) => {
         />
 
         {/* Contact Phone# */}
-        <NormalTextInput
+        <Text>Contact Phone#</Text>
+        <Controller
           control={control}
-          errors={errors}
-          title={'Contact Phone#'}
-          propName='contactPhone'
+          render={({ field: { onChange, value } }) => (
+            <PhoneInput
+              // style={styles.input}
+              defaultCountry='PT'
+              onChange={onChange}
+              value={value}
+            />
+          )}
+          name='contactPhone'
         />
 
         {/* Notes */}
