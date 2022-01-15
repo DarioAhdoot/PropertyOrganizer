@@ -1,6 +1,7 @@
 import Amplify from 'aws-amplify';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
+import { NativeBaseProvider } from 'native-base';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
@@ -81,25 +82,27 @@ function PropertyOrganizerApp({ navigation }: { navigation: any }) {
 export default function App() {
   return (
     <RecoilRoot>
-      <PaperProvider theme={theme}>
-        <SafeAreaView style={styles.container}>
-          <NavigationContainer>
-            <Stack.Navigator initialRouteName='Home'>
-              <Stack.Screen
-                name='Home'
-                component={PropertyOrganizerApp}
-                options={{ title: 'Property Organizer' }} />
-              <Stack.Screen
-                name='PropertyDetail'
-                component={PropertyDetail} />
-              <Stack.Screen
-                name='PropertyAddUpdate'
-                component={PropertyAddUpdate} />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </SafeAreaView>
-        <StatusBar style='auto' />
-      </PaperProvider>
+      <NativeBaseProvider>
+        {/* <PaperProvider theme={theme}> */}
+          <SafeAreaView style={styles.container}>
+            <NavigationContainer>
+              <Stack.Navigator initialRouteName='Home'>
+                <Stack.Screen
+                  name='Home'
+                  component={PropertyOrganizerApp}
+                  options={{ title: 'Property Organizer' }} />
+                <Stack.Screen
+                  name='PropertyDetail'
+                  component={PropertyDetail} />
+                <Stack.Screen
+                  name='PropertyAddUpdate'
+                  component={PropertyAddUpdate} />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </SafeAreaView>
+          <StatusBar style='auto' />
+        {/* </PaperProvider> */}
+      </NativeBaseProvider>
     </RecoilRoot>
   );
 }

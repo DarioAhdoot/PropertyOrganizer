@@ -38,6 +38,7 @@ type PurchaseInfo {
 
 type RentalInfo {
   rentalPrice: Int
+  deposit: Int
   utilities: Int
   leaseLength: Int
   parkingPrice: Int
