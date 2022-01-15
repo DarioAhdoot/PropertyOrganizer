@@ -1,18 +1,33 @@
 import React from 'react';
-import { Checkbox, FormControl, Input, Select, TextArea, VStack, WarningOutlineIcon } from 'native-base';
-import { Text, View, Button, StyleSheet } from 'react-native';
+import {
+  Checkbox,
+  FormControl,
+  Input,
+  ScrollView,
+  Select,
+  TextArea,
+  VStack,
+  WarningOutlineIcon
+} from 'native-base';
+import {
+  Button,
+  Platform,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import PhoneInput from 'react-phone-number-input/react-native-input'
-import Icon from '@mdi/react'
-import {
-  mdiCurrencyEur,
-} from '@mdi/js'
+// import Icon from '@mdi/react'
+// import {
+//   mdiCurrencyEur,
+// } from '@mdi/js'
 
 import { Property, PropertyType } from '../models';
 
 const styles = StyleSheet.create({
   container: {
-    width: 500,
+    width: Platform.OS === 'web' ? 500 : '100%',
     flex: 1,
   },
   formRow: {
@@ -20,7 +35,7 @@ const styles = StyleSheet.create({
     margin: 4,
   },
   formLabel: {
-    width: 200,
+    width: 120,
     fontWeight: 'bold',
   },
   formRowMultiLine: {
@@ -46,13 +61,24 @@ const PropertyAddUpdate = ({ navigation }: { navigation: any }) => {
   // Can't call it synchronously because we're not allowed to do so while rendering
   setTimeout(() => navigation.setOptions({ title: "My Title!" }));
 
+  if (Platform.OS === 'web') {
+    return (
+      <View style={styles.container}>
+        <GeneralInfoSection control={control} errors={errors} />
+        <RentalInfoSection control={control} errors={errors} />
+        <PropertySpecSection control={control} errors={errors} />
+        <Button title='Add' onPress={handleSubmit(onSubmit)} />
+      </View>
+    );
+  }
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <GeneralInfoSection control={control} errors={errors} />
       <RentalInfoSection control={control} errors={errors} />
       <PropertySpecSection control={control} errors={errors} />
       <Button title='Add' onPress={handleSubmit(onSubmit)} />
-    </View>
+    </ScrollView>
   );
 }
 
@@ -65,7 +91,7 @@ const GeneralInfoSection = ({ control, errors }: { control: any, errors: any }) 
       <NormalTextInput
         control={control}
         errors={errors}
-        title={'Property Name/Title'}
+        title={'Property Name'}
         propName='title'
         placeholder='A name to quickly find this property'
         isRequired={true}
@@ -119,7 +145,7 @@ const GeneralInfoSection = ({ control, errors }: { control: any, errors: any }) 
       <PhoneNumberInput
         control={control}
         errors={errors}
-        title={'Contact Phone #'}
+        title={'Contact Phone'}
         propName='contactPhone'
       />
 
@@ -130,7 +156,7 @@ const GeneralInfoSection = ({ control, errors }: { control: any, errors: any }) 
         title={'Notes'}
         propName='notes'
         numberOfLines={5}
-        placeholder='Your notes about the property'
+        placeHolder='Your notes about the property'
       />
     </View>
   );
@@ -154,9 +180,9 @@ const RentalInfoSection = ({ control, errors }: { control: any, errors: any }) =
       <NumericInput
         control={control}
         errors={errors}
-        title={'Lease Length (in months)'}
+        title={'Lease Length'}
         propName='rentalInfo.leaseLength'
-        placeHolder='The lease length in months'
+        placeHolder='In months'
       />
 
       {/* Deposit */}
@@ -364,6 +390,15 @@ const FormLabel = ({ title }: { title: string }) => {
   return (<FormControl.Label style={styles.formLabel}>{title}:</FormControl.Label>);
 };
 
+const FormError = ({ errors, isRequired, propName }: { errors: any, isRequired?: boolean, propName: string }) => {
+  return (
+    <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+      {isRequired && errors[propName] && errors[propName]['type'] === 'required' && 'This field is required'}
+    </FormControl.ErrorMessage>
+
+  );
+};
+
 const NormalTextInput = ({
   title,
   propName,
@@ -381,33 +416,28 @@ const NormalTextInput = ({
   control: any,
   errors: any
 }) => {
-  console.log(`Errors: ${JSON.stringify(errors)}`);
   return (
-    <View>
-      <FormControl isRequired={isRequired} isInvalid={errors[propName]}>
-        <VStack>
-          <View style={styles.formRow}>
-            <FormLabel title={title} />
-            <Controller
-              control={control}
-              rules={rules}
-              render={({ field: { onChange, value } }) => (
-                <Input
-                  style={styles.formInput}
-                  onChangeText={onChange}
-                  value={value}
-                  placeholder={placeholder}
-                />
-              )}
-              name={propName}
-            />
-          </View>
-          <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-            {isRequired && errors[propName] && errors[propName]['type'] === 'required' && 'This field is required'}
-          </FormControl.ErrorMessage>
-        </VStack>
-      </FormControl>
-    </View>
+    <FormControl isRequired={isRequired} isInvalid={errors[propName]}>
+      <VStack>
+        <View style={styles.formRow}>
+          <FormLabel title={title} />
+          <Controller
+            control={control}
+            rules={rules}
+            render={({ field: { onChange, value } }) => (
+              <Input
+                style={styles.formInput}
+                onChangeText={onChange}
+                value={value}
+                placeholder={placeholder}
+              />
+            )}
+            name={propName}
+          />
+        </View>
+        <FormError errors={errors} isRequired={isRequired} propName={propName} />
+      </VStack>
+    </FormControl>
   );
 };
 
@@ -415,35 +445,40 @@ const MultiLineTextInput = ({ title,
   propName,
   numberOfLines,
   rules,
-  placeholder,
+  placeHolder,
+  isRequired,
   control,
-  errors }: {
-    title: string,
-    propName: string,
-    numberOfLines?: number,
-    rules?: any,
-    placeholder?: string,
-    control: any,
-    errors: any
-  }) => {
+  errors
+}: {
+  title: string,
+  propName: string,
+  numberOfLines?: number,
+  rules?: any,
+  placeHolder?: string,
+  isRequired?: boolean,
+  control: any,
+  errors: any
+}) => {
   return (
-    <View style={styles.formRowMultiLine}>
-      <FormLabel title={title} />
-      <Controller
-        control={control}
-        rules={rules}
-        render={({ field: { onChange, value } }) => (
-          <TextArea
-            onChangeText={onChange}
-            value={value}
-            totalLines={numberOfLines ?? 5}
-            placeholder={placeholder}
-          />
-        )}
-        name={propName}
-      />
-      {errors[propName] && <Text>{JSON.stringify(errors[propName])}</Text>}
-    </View>
+    <FormControl isRequired={isRequired} isInvalid={errors[propName]}>
+      <View style={styles.formRowMultiLine}>
+        <FormLabel title={title} />
+        <Controller
+          control={control}
+          rules={rules}
+          render={({ field: { onChange, value } }) => (
+            <TextArea
+              onChangeText={onChange}
+              value={value}
+              totalLines={numberOfLines ?? 5}
+              placeholder={placeHolder}
+            />
+          )}
+          name={propName}
+        />
+        <FormError errors={errors} isRequired={isRequired} propName={propName} />
+      </View>
+    </FormControl>
   );
 };
 
@@ -451,108 +486,157 @@ const NumericInput = ({
   title,
   propName,
   placeHolder,
+  rules,
+  isRequired,
   control,
   errors
 }: {
   title: string,
   propName: string,
   placeHolder?: string,
+  rules?: any,
+  isRequired?: boolean,
   control: any,
   errors: any
 }) => {
   return (
-    <View style={styles.formRow}>
-      <FormLabel title={title} />
-      <Controller
-        control={control}
-        render={({ field: { onChange, value } }) => (
-          <Input
-            style={styles.formInput}
-            onChangeText={onChange}
-            value={value}
-            keyboardType='numeric'
-            placeholder={placeHolder}
+    <FormControl isRequired={isRequired} isInvalid={errors[propName]}>
+      <VStack>
+        <View style={styles.formRow}>
+          <FormLabel title={title} />
+          <Controller
+            control={control}
+            rules={rules}
+            render={({ field: { onChange, value } }) => (
+              <Input
+                style={styles.formInput}
+                onChangeText={onChange}
+                value={value}
+                placeholder={placeHolder}
+                keyboardType='numeric'
+              />
+            )}
+            name={propName}
           />
-        )}
-        name={propName}
-      />
-      {errors[propName] && <Text>{JSON.stringify(errors[propName])}</Text>}
-    </View>
+        </View>
+        <FormError errors={errors} isRequired={isRequired} propName={propName} />
+      </VStack>
+    </FormControl>
   );
 };
-
 
 const CurrencyInput = ({
   title,
   propName,
   placeHolder,
+  rules,
+  isRequired,
   control,
   errors
 }: {
   title: string,
   propName: string,
   placeHolder?: string,
+  rules?: any,
+  isRequired?: boolean,
   control: any,
   errors: any
 }) => {
   return (
-    <View style={styles.formRow}>
-      <FormLabel title={title} />
-      <Controller
-        control={control}
-        render={({ field: { onChange, value } }) => (
-          <Input
-            style={styles.formInput}
-            onChangeText={onChange}
-            value={value}
-            keyboardType='numeric'
-            placeholder={placeHolder}
-            InputRightElement={
-              <Icon
-                path={mdiCurrencyEur}
-                size={0.5}
-              ></Icon>
-            }
+    <FormControl isRequired={isRequired} isInvalid={errors[propName]}>
+      <VStack>
+        <View style={styles.formRow}>
+          <FormLabel title={title} />
+          <Controller
+            control={control}
+            rules={rules}
+            render={({ field: { onChange, value } }) => (
+              <Input
+                style={styles.formInput}
+                onChangeText={onChange}
+                value={value}
+                placeholder={placeHolder}
+                // InputRightElement={
+                //   <Icon
+                //     path={mdiCurrencyEur}
+                //     size={0.5}
+                //   ></Icon>
+                // }
+                keyboardType='numeric'
+              />
+            )}
+            name={propName}
           />
-        )}
-        name={propName}
-      />
-      {errors[propName] && <Text>{JSON.stringify(errors[propName])}</Text>}
-    </View>
+        </View>
+        <FormError errors={errors} isRequired={isRequired} propName={propName} />
+      </VStack>
+    </FormControl>
   );
 };
 
-const CountInput = ({ title, propName, control, errors }: { title: string, propName: string, control: any, errors: any }) => {
+const CountInput = ({
+  title,
+  propName,
+  placeHolder,
+  rules,
+  isRequired,
+  control,
+  errors
+}: {
+  title: string,
+  propName: string,
+  placeHolder?: string,
+  rules?: any,
+  isRequired?: boolean,
+  control: any,
+  errors: any
+}) => {
   return (
-    <View style={styles.formRow}>
-      <FormLabel title={title} />
-      <Controller
-        control={control}
-        render={({ field: { onChange, value } }) => (
-          <Select
-            style={styles.formInput}
-            onValueChange={onChange}
-            selectedValue={value}>
-            <Select.Item label={'0'} value={'0'} />
-            <Select.Item label={'1'} value={'1'} />
-            <Select.Item label={'2'} value={'2'} />
-            <Select.Item label={'3'} value={'3'} />
-            <Select.Item label={'4'} value={'5'} />
-            <Select.Item label={'5'} value={'5'} />
-            <Select.Item label={'6'} value={'6'} />
-            <Select.Item label={'7'} value={'7'} />
-            <Select.Item label={'8'} value={'8'} />
-            <Select.Item label={'9'} value={'9'} />
-          </Select>
-        )}
-        name={propName}
-      />
-      {errors[propName] && <Text>{JSON.stringify(errors[propName])}</Text>}
-    </View>
+    <FormControl isRequired={isRequired} isInvalid={errors[propName]}>
+      <VStack>
+        <View style={styles.formRow}>
+          <FormLabel title={title} />
+          <Controller
+            control={control}
+            rules={rules}
+            render={({ field: { onChange, value } }) => (
+              <Select
+                style={styles.formInput}
+                placeholder={placeHolder}
+                onValueChange={onChange}
+                selectedValue={value}>
+                <Select.Item label={'0'} value={'0'} />
+                <Select.Item label={'1'} value={'1'} />
+                <Select.Item label={'2'} value={'2'} />
+                <Select.Item label={'3'} value={'3'} />
+                <Select.Item label={'4'} value={'5'} />
+                <Select.Item label={'5'} value={'5'} />
+                <Select.Item label={'6'} value={'6'} />
+                <Select.Item label={'7'} value={'7'} />
+                <Select.Item label={'8'} value={'8'} />
+                <Select.Item label={'9'} value={'9'} />
+              </Select>
+            )}
+            name={propName}
+          />
+        </View>
+        <FormError errors={errors} isRequired={isRequired} propName={propName} />
+      </VStack>
+    </FormControl>
   );
 };
 
-const IndeterminateCheckBox = ({ title, propName, control, errors }: { title: string, propName: string, control: any, errors: any }) => {
+const IndeterminateCheckBox = ({
+  title,
+  propName,
+  control,
+  errors
+}: {
+  title: string,
+  propName: string,
+  control: any,
+  errors: any
+}) => {
   return (
     <View style={styles.formRow}>
       <FormLabel title={title} />
@@ -572,7 +656,6 @@ const IndeterminateCheckBox = ({ title, propName, control, errors }: { title: st
       {errors[propName] && <Text>{JSON.stringify(errors[propName])}</Text>}
     </View>
   );
-
 };
 
 const PickerInput = ({
@@ -586,7 +669,7 @@ const PickerInput = ({
   title: string,
   propName: string,
   items: PickerItemType[],
-    placeHolder: string,
+  placeHolder: string,
   control: any,
   errors: any
 }) => {
