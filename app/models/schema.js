@@ -196,6 +196,20 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "floor": {
+                    "name": "floor",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "floors": {
+                    "name": "floors",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "diningRoom": {
                     "name": "diningRoom",
                     "isArray": false,
@@ -217,24 +231,10 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "floor": {
-                    "name": "floor",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
                 "lift": {
                     "name": "lift",
                     "isArray": false,
                     "type": "Boolean",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "floors": {
-                    "name": "floors",
-                    "isArray": false,
-                    "type": "Int",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -304,6 +304,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "deposit": {
+                    "name": "deposit",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "utilities": {
                     "name": "utilities",
                     "isArray": false,
@@ -342,5 +349,5 @@ export const schema = {
             }
         }
     },
-    "version": "fd37f386aafcc3c22078404e9c1056e3"
+    "version": "344157ce803f8c600913ab1575e58ea0"
 };

@@ -16,14 +16,23 @@ import {
   Text,
   View
 } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import PhoneInput from 'react-phone-number-input/react-native-input'
+import { useForm, Controller, UseFormHandleSubmit } from 'react-hook-form';
+import PhoneInput from 'react-phone-number-input/react-native-input';
 // import Icon from '@mdi/react'
 // import {
 //   mdiCurrencyEur,
 // } from '@mdi/js'
+import {
+  useRecoilState,
+} from 'recoil';
+import _ from 'lodash';
 
-import { Property, PropertyType } from '../models';
+
+import { CreatePropertyInput, ListingType, PropertyType, Property, UpdatePropertyInput } from '../API';
+import { createProperty, updateProperty } from '../GraphQLAPI';
+import {
+  propertiesAtom,
+} from '../state';
 
 const styles = StyleSheet.create({
   container: {
@@ -46,28 +55,102 @@ const styles = StyleSheet.create({
   },
 });
 
-const PropertyAddUpdate = ({ navigation }: { navigation: any }) => {
-  const { control, handleSubmit, formState: { errors } } = useForm<Property>({
+type SubmitFn = (data: CreatePropertyInput | UpdatePropertyInput) => Promise<void>;
+
+const PropertyAdd = ({ navigation }: { navigation: any }) => {
+  const [properties, setProperties] = useRecoilState(propertiesAtom);
+  const { control, handleSubmit, formState: { errors } } = useForm<CreatePropertyInput>({
     defaultValues: {
-      title: '',
-      address: '',
+      listingType: ListingType.rental,
       propertySpec: {
-        propertyType: PropertyType.APARTMENT
+        propertyType: PropertyType.apartment
       },
     }
   });
-  const onSubmit = (data: Property) => console.log(JSON.stringify(data));
+  const onSubmit: SubmitFn = async (data: CreatePropertyInput | UpdatePropertyInput) => {
+    try {
+      const newProperty = await createProperty(data as CreatePropertyInput);
+      let newProperties = [...properties];
+      newProperties.push(newProperty);
+      setProperties(newProperties);
+      navigation.goBack();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // Can't call it synchronously because we're not allowed to do so while rendering
-  setTimeout(() => navigation.setOptions({ title: "My Title!" }));
+  setTimeout(() => navigation.setOptions({ title: "Add a new property" }));
 
+  return (
+    <PropertyAddUpdate
+      control={control}
+      errors={errors}
+      handleSubmit={handleSubmit}
+      onSubmit={onSubmit}
+      submitButtonText='Add Property'
+    />
+  )
+};
+
+const PropertyUpdate = (props: any) => {
+  const property = props.route.params.property;
+  const { navigation } = props;
+  console.log(`PropertyUpdate:navigation ${JSON.stringify(navigation)}`);
+  console.log(`PropertyUpdate:property ${JSON.stringify(property)}`);
+  const [properties, setProperties] = useRecoilState(propertiesAtom);
+  const { control, handleSubmit, formState: { errors } } = useForm<UpdatePropertyInput>({
+    defaultValues: property
+  });
+
+  const onSubmit: SubmitFn = async (data: CreatePropertyInput | UpdatePropertyInput) => {
+    try {
+      const cleansedData = _.omit(data, ['_lastChangedAt', 'updatedAt', 'createdAt', '_deleted']);
+      const updatedProperty = await updateProperty(cleansedData as UpdatePropertyInput);
+      let newProperties = [...properties];
+      const index = newProperties.findIndex(p => p.id === updatedProperty.id);
+      newProperties[index] = updatedProperty;
+      setProperties(newProperties);
+      navigation.goBack();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Can't call it synchronously because we're not allowed to do so while rendering
+  setTimeout(() => navigation.setOptions({ title: property.address }));
+
+  return (
+    <PropertyAddUpdate
+      control={control}
+      errors={errors}
+      handleSubmit={handleSubmit}
+      onSubmit={onSubmit}
+      submitButtonText='Update Property'
+    />
+  )
+};
+
+const PropertyAddUpdate = ({
+  control,
+  errors,
+  handleSubmit,
+  onSubmit,
+  submitButtonText,
+}: {
+  control: any,
+  errors: any,
+  handleSubmit: UseFormHandleSubmit<CreatePropertyInput | UpdatePropertyInput>,
+  onSubmit: SubmitFn,
+  submitButtonText: string
+}) => {
   if (Platform.OS === 'web') {
     return (
       <View style={styles.container}>
         <GeneralInfoSection control={control} errors={errors} />
         <RentalInfoSection control={control} errors={errors} />
         <PropertySpecSection control={control} errors={errors} />
-        <Button title='Add' onPress={handleSubmit(onSubmit)} />
+        <Button title={submitButtonText} onPress={handleSubmit(onSubmit)} />
       </View>
     );
   }
@@ -77,10 +160,12 @@ const PropertyAddUpdate = ({ navigation }: { navigation: any }) => {
       <GeneralInfoSection control={control} errors={errors} />
       <RentalInfoSection control={control} errors={errors} />
       <PropertySpecSection control={control} errors={errors} />
-      <Button title='Add' onPress={handleSubmit(onSubmit)} />
+      <Button title={submitButtonText} onPress={handleSubmit(onSubmit)} />
     </ScrollView>
   );
-}
+
+};
+
 
 const GeneralInfoSection = ({ control, errors }: { control: any, errors: any }) => {
   return (
@@ -245,9 +330,9 @@ const PropertySpecSection = ({ control, errors }: { control: any, errors: any })
         propName='propertySpec.propertyType'
         placeHolder='Select a property type'
         items={[
-          { label: 'House', value: PropertyType.HOUSE },
-          { label: 'Apartment', value: PropertyType.APARTMENT },
-          { label: 'Loft', value: PropertyType.LOFT },
+          { label: 'House', value: PropertyType.house },
+          { label: 'Apartment', value: PropertyType.apartment },
+          { label: 'Loft', value: PropertyType.loft },
         ]}
       />
 
@@ -726,4 +811,5 @@ const PhoneNumberInput = (
   );
 };
 
-export default PropertyAddUpdate;
+export { PropertyAdd };
+export { PropertyUpdate };

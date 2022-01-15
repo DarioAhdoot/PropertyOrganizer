@@ -20,7 +20,9 @@ export async function listProperties(): Promise<Types.Property[]> {
   if (result.data) {
     const listQ: Types.ListPropertiesQuery = result.data;
     if (listQ.listProperties && listQ.listProperties.items) {
-      return listQ.listProperties.items as Types.Property[];
+      let nonDeletedItems: Types.Property[] = listQ.listProperties.items as Types.Property[];
+      nonDeletedItems = nonDeletedItems.filter((item: Types.Property) => { return item._deleted !== true; });
+      return nonDeletedItems;
     } else {
       throw new Error('listProperties query failed');
     }
@@ -57,6 +59,7 @@ export async function createProperty(input: Types.CreatePropertyInput): Promise<
   if (result.data) {
     const createM: Types.CreatePropertyMutation = result.data;
     if (createM.createProperty) {
+      console.log('-> createProperty mutation succeeded');
       return createM.createProperty as Types.Property;
     } else {
       throw new Error('createProperty mutation failed');
@@ -74,6 +77,7 @@ export async function updateProperty(input: Types.UpdatePropertyInput): Promise<
   if (result.data) {
     const updateM: Types.UpdatePropertyMutation = result.data;
     if (updateM.updateProperty) {
+      console.log('-> updateProperty mutation succeeded');
       return updateM.updateProperty as Types.Property;
     } else {
       throw new Error('updateProperty mutation failed');
@@ -91,6 +95,7 @@ export async function deleteProperty(input: Types.DeletePropertyInput) {
   if (result.data) {
     const deleteM: Types.DeletePropertyMutation = result.data;
     if (deleteM.deleteProperty) {
+      console.log('-> deleteProperty mutation succeeded');
       return deleteM.deleteProperty as Types.Property;
     } else {
       throw new Error('deleteProperty mutation failed');

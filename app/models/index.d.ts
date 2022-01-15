@@ -16,12 +16,12 @@ export declare class PropertySpec {
   readonly bedrooms?: number;
   readonly bathrooms?: number;
   readonly area?: number;
+  readonly floor?: number;
+  readonly floors?: number;
   readonly diningRoom?: boolean;
   readonly balcony?: boolean;
   readonly patio?: boolean;
-  readonly floor?: number;
   readonly lift?: boolean;
-  readonly floors?: number;
   readonly parking?: boolean;
   readonly washer?: boolean;
   readonly dryer?: boolean;
@@ -38,6 +38,7 @@ export declare class PurchaseInfo {
 
 export declare class RentalInfo {
   readonly rentalPrice?: number;
+  readonly deposit?: number;
   readonly utilities?: number;
   readonly leaseLength?: number;
   readonly parkingPrice?: number;

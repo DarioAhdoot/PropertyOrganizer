@@ -12,7 +12,7 @@ import {
   propertiesAtom,
   filterTextAtom,
 } from '../state';
-import { listProperties, createProperty } from '../GraphQLAPI';
+import { listProperties, createProperty, deleteProperty } from '../GraphQLAPI';
 import { ListingType, PropertyType, Property } from '../models'; 
 
 const style = StyleSheet.create({
@@ -41,6 +41,7 @@ const PropertyList = ({ navigation }: { navigation: any }) => {
     return property.address.toLowerCase().includes(filterText.toLowerCase());
   });
   // console.log(`FILTERED PROPERTIES: ${JSON.stringify(filteredProperties)}`);
+  console.log(`Navigation: ${JSON.stringify(navigation)}`);
 
   return (
     <View style={style.container}>
@@ -61,34 +62,9 @@ const PropertyList = ({ navigation }: { navigation: any }) => {
           }}
           type='clear'
           onPress={ async () => {
-            navigation.navigate('PropertyAddUpdate')
-            // setProperties(await listProperties());
-          }}
-        />
-        {/* <IconButton
-          icon='plus'
-          size={20}
-          onPress={ async () => {
-            await createProperty({
-              address: '287 Bedford Ave, Brooklyn, NY 11211',
-              imageUrls: [],
-              videoUrls: [],
-              listingType: ListingType.rental,
-              propertySpec: {
-                propertyType: PropertyType.apartment,
-                bedrooms: 2,
-                bathrooms: 1,
-                area: 100,
-              },
-              rentalInfo: {
-                rentalPrice: 1000,
-                utilities: 100,
-              }
-            })
-
             setProperties(await listProperties());
           }}
-        /> */}
+        />
       </View>
       <ScrollView style={style.container}>
         <DataTable style={style.dataTable}>
@@ -115,9 +91,9 @@ const PropertyList = ({ navigation }: { navigation: any }) => {
                       color: 'black',
                     }}
                     type='clear'
-                  // onPress={async () => {
-                  //   setProperties(await listProperties());
-                  // }}
+                    onPress={async () => {
+                      navigation.navigate('PropertyUpdate', { property })
+                    }}
                   />
                   <Button
                     icon={{
@@ -127,9 +103,16 @@ const PropertyList = ({ navigation }: { navigation: any }) => {
                       color: 'black',
                     }}
                     type='clear'
-                  // onPress={async () => {
-                  //   setProperties(await listProperties());
-                  // }}
+                    onPress={ async () => {
+                      try {
+                        await deleteProperty({ id: property.id, _version: property._version });
+                        let newProperties = [...properties];
+                        newProperties = newProperties.filter(p => p.id !== property.id);
+                        setProperties(newProperties);
+                      } catch (error) {
+                        console.log(`Error deleting property: ${error}`);
+                      }
+                    }}
                   />
                   <Button
                     icon={{

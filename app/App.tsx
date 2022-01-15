@@ -19,7 +19,7 @@ import { listProperties } from './GraphQLAPI';
 import { propertiesAtom } from './state';
 import PropertyList from './components/PropertyList';
 import PropertyDetail from './components/PropertyDetail';
-import PropertyAddUpdate from './components/PropertyAddUpdate';
+import { PropertyAdd, PropertyUpdate } from './components/PropertyAddUpdate';
 
 import config from './aws-exports';
 Amplify.configure(config);
@@ -54,7 +54,7 @@ function PropertyOrganizerApp({ navigation }: { navigation: any }) {
   return (
     <View>
       <PropertyList navigation={navigation} />
-      {!isReady && 
+      {!isReady &&
         <AppLoading
           startAsync={async () => {
             return new Promise(async (resolve, reject) => {
@@ -84,23 +84,26 @@ export default function App() {
     <RecoilRoot>
       <NativeBaseProvider>
         {/* <PaperProvider theme={theme}> */}
-          <SafeAreaView style={styles.container}>
-            <NavigationContainer>
-              <Stack.Navigator initialRouteName='Home'>
-                <Stack.Screen
-                  name='Home'
-                  component={PropertyOrganizerApp}
-                  options={{ title: 'Property Organizer' }} />
-                <Stack.Screen
-                  name='PropertyDetail'
-                  component={PropertyDetail} />
-                <Stack.Screen
-                  name='PropertyAddUpdate'
-                  component={PropertyAddUpdate} />
-              </Stack.Navigator>
-            </NavigationContainer>
-          </SafeAreaView>
-          <StatusBar style='auto' />
+        <SafeAreaView style={styles.container}>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName='Home'>
+              <Stack.Screen
+                name='Home'
+                component={PropertyOrganizerApp}
+                options={{ title: 'Property Organizer' }} />
+              <Stack.Screen
+                name='PropertyDetail'
+                component={PropertyDetail} />
+              <Stack.Screen
+                name='PropertyAdd'
+                component={PropertyAdd} />
+              <Stack.Screen
+                name='PropertyUpdate'
+                component={PropertyUpdate} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SafeAreaView>
+        <StatusBar style='auto' />
         {/* </PaperProvider> */}
       </NativeBaseProvider>
     </RecoilRoot>
