@@ -729,9 +729,11 @@ const IndeterminateCheckBox = ({
         control={control}
         render={({ field: { onChange, value } }) => (
           <Checkbox
+            name={propName}
             style={styles.formInput}
             onChange={onChange}
             value={value}
+            isChecked={value}
             isIndeterminate={true}
             isInvalid={errors[propName]}
           />
