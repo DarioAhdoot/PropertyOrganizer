@@ -105,7 +105,7 @@ const PropertyUpdate = (props: any) => {
 
   const onSubmit: SubmitFn = async (data: CreatePropertyInput | UpdatePropertyInput) => {
     try {
-      const cleansedData = _.omit(data, ['_lastChangedAt', 'updatedAt', 'createdAt', '_deleted']);
+      const cleansedData = _.omit(data, ['_lastChangedAt', 'updatedAt', 'createdAt', '_deleted', 'owner']);
       const updatedProperty = await updateProperty(cleansedData as UpdatePropertyInput);
       let newProperties = [...properties];
       const index = newProperties.findIndex(p => p.id === updatedProperty.id);
@@ -596,7 +596,7 @@ const NumericInput = ({
               <Input
                 style={styles.formInput}
                 onChangeText={onChange}
-                value={value}
+                value={(value && value.toString()) || ''}
                 placeholder={placeHolder}
                 keyboardType='numeric'
               />
@@ -639,7 +639,7 @@ const CurrencyInput = ({
               <Input
                 style={styles.formInput}
                 onChangeText={onChange}
-                value={value}
+                value={(value && value.toString()) || ''}
                 placeholder={placeHolder}
                 // InputRightElement={
                 //   <Icon
@@ -736,7 +736,9 @@ const IndeterminateCheckBox = ({
             isChecked={value}
             isIndeterminate={true}
             isInvalid={errors[propName]}
-          />
+          >
+            <Text>{title}</Text>
+          </Checkbox>
         )}
         name={propName}
       />
@@ -770,7 +772,7 @@ const PickerInput = ({
             <Select
               style={styles.formInput}
               onValueChange={onChange}
-              selectedValue={value ?? items[0]}
+              selectedValue={value.label}
               placeholder={placeHolder}>
               {items.map((item, index) => (<Select.Item label={item.label} value={item.value} key={index} />))}
             </Select>

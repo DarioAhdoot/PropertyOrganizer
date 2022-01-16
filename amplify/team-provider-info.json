@@ -10,6 +10,19 @@
       "StackName": "amplify-propertyorganizer-dev-120508",
       "StackId": "arn:aws:cloudformation:eu-west-1:740436693911:stack/amplify-propertyorganizer-dev-120508/c27a4fc0-6e1f-11ec-9706-061724e7fa13",
       "AmplifyAppId": "d3rrcrubug9jd3"
+    },
+    "categories": {
+      "auth": {
+        "propertyorganizerb35f1b66": {},
+        "propertyorganizer2aa4209e": {}
+      },
+      "function": {
+        "propertyorganizerb35f1b66PostConfirmation": {
+          "GROUP": "users",
+          "deploymentBucketName": "amplify-propertyorganizer-dev-120508-deployment",
+          "s3Key": "amplify-builds/propertyorganizerb35f1b66PostConfirmation-4d3046324f4c4d464a68-build.zip"
+        }
+      }
     }
   }
 }

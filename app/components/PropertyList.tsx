@@ -61,8 +61,8 @@ const PropertyList = ({ navigation }: { navigation: any }) => {
             color: 'black',
           }}
           type='clear'
-          onPress={ async () => {
-            setProperties(await listProperties());
+          onPress={ () => {
+            navigation.navigate('PropertyAdd');
           }}
         />
       </View>

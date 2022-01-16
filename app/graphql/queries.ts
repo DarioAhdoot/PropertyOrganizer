@@ -17,12 +17,12 @@ export const getProperty = /* GraphQL */ `
         bedrooms
         bathrooms
         area
+        floor
+        floors
         diningRoom
         balcony
         patio
-        floor
         lift
-        floors
         parking
         washer
         dryer
@@ -33,6 +33,7 @@ export const getProperty = /* GraphQL */ `
       listingType
       rentalInfo {
         rentalPrice
+        deposit
         utilities
         leaseLength
         parkingPrice
@@ -51,6 +52,7 @@ export const getProperty = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
@@ -74,12 +76,12 @@ export const listProperties = /* GraphQL */ `
           bedrooms
           bathrooms
           area
+          floor
+          floors
           diningRoom
           balcony
           patio
-          floor
           lift
-          floors
           parking
           washer
           dryer
@@ -90,6 +92,7 @@ export const listProperties = /* GraphQL */ `
         listingType
         rentalInfo {
           rentalPrice
+          deposit
           utilities
           leaseLength
           parkingPrice
@@ -108,6 +111,7 @@ export const listProperties = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
       }
       nextToken
       startedAt
@@ -140,12 +144,12 @@ export const syncProperties = /* GraphQL */ `
           bedrooms
           bathrooms
           area
+          floor
+          floors
           diningRoom
           balcony
           patio
-          floor
           lift
-          floors
           parking
           washer
           dryer
@@ -156,6 +160,7 @@ export const syncProperties = /* GraphQL */ `
         listingType
         rentalInfo {
           rentalPrice
+          deposit
           utilities
           leaseLength
           parkingPrice
@@ -174,6 +179,7 @@ export const syncProperties = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
       }
       nextToken
       startedAt

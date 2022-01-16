@@ -6,6 +6,7 @@ import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { withAuthenticator } from 'aws-amplify-react-native';
 
 import AppLoading from 'expo-app-loading';
 import {
@@ -79,7 +80,7 @@ function PropertyOrganizerApp({ navigation }: { navigation: any }) {
   );
 }
 
-export default function App() {
+function App() {
   return (
     <RecoilRoot>
       <NativeBaseProvider>
@@ -109,3 +110,5 @@ export default function App() {
     </RecoilRoot>
   );
 }
+
+export default withAuthenticator(App);

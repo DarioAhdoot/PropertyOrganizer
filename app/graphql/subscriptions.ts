@@ -3,8 +3,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateProperty = /* GraphQL */ `
-  subscription OnCreateProperty {
-    onCreateProperty {
+  subscription OnCreateProperty($owner: String) {
+    onCreateProperty(owner: $owner) {
       id
       title
       address
@@ -17,12 +17,12 @@ export const onCreateProperty = /* GraphQL */ `
         bedrooms
         bathrooms
         area
+        floor
+        floors
         diningRoom
         balcony
         patio
-        floor
         lift
-        floors
         parking
         washer
         dryer
@@ -33,6 +33,7 @@ export const onCreateProperty = /* GraphQL */ `
       listingType
       rentalInfo {
         rentalPrice
+        deposit
         utilities
         leaseLength
         parkingPrice
@@ -51,12 +52,13 @@ export const onCreateProperty = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
 export const onUpdateProperty = /* GraphQL */ `
-  subscription OnUpdateProperty {
-    onUpdateProperty {
+  subscription OnUpdateProperty($owner: String) {
+    onUpdateProperty(owner: $owner) {
       id
       title
       address
@@ -69,12 +71,12 @@ export const onUpdateProperty = /* GraphQL */ `
         bedrooms
         bathrooms
         area
+        floor
+        floors
         diningRoom
         balcony
         patio
-        floor
         lift
-        floors
         parking
         washer
         dryer
@@ -85,6 +87,7 @@ export const onUpdateProperty = /* GraphQL */ `
       listingType
       rentalInfo {
         rentalPrice
+        deposit
         utilities
         leaseLength
         parkingPrice
@@ -103,12 +106,13 @@ export const onUpdateProperty = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
 export const onDeleteProperty = /* GraphQL */ `
-  subscription OnDeleteProperty {
-    onDeleteProperty {
+  subscription OnDeleteProperty($owner: String) {
+    onDeleteProperty(owner: $owner) {
       id
       title
       address
@@ -121,12 +125,12 @@ export const onDeleteProperty = /* GraphQL */ `
         bedrooms
         bathrooms
         area
+        floor
+        floors
         diningRoom
         balcony
         patio
-        floor
         lift
-        floors
         parking
         washer
         dryer
@@ -137,6 +141,7 @@ export const onDeleteProperty = /* GraphQL */ `
       listingType
       rentalInfo {
         rentalPrice
+        deposit
         utilities
         leaseLength
         parkingPrice
@@ -155,6 +160,7 @@ export const onDeleteProperty = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;

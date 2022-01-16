@@ -5,9 +5,20 @@
     "serviceName": "AppSync",
     "gqlSchemaPath": "/Users/dario/Dev/Personal/PropertyOrganizer/amplify/backend/api/PropertyOrganizer/schema.graphql",
     "defaultAuthType": {
-      "mode": "API_KEY",
-      "expirationTime": 7
+      "mode": "AMAZON_COGNITO_USER_POOLS",
+      "cognitoUserPoolId": "authpropertyorganizer2aa4209e"
     },
+    "additionalAuthTypes": [
+      {
+        "mode": "API_KEY",
+        "expirationTime": 7,
+        "apiKeyExpirationDate": "2022-01-23T13:28:10.698Z",
+        "keyDescription": "GraphQL API Key"
+      },
+      {
+        "mode": "AWS_IAM"
+      }
+    ],
     "conflictResolution": {
       "defaultResolutionStrategy": {
         "type": "AUTOMERGE"

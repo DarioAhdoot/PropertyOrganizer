@@ -1,0 +1,18 @@
+{
+  "trigger": true,
+  "modules": [
+    "add-to-group"
+  ],
+  "parentResource": "propertyorganizerb35f1b66",
+  "functionName": "propertyorganizerb35f1b66PostConfirmation",
+  "resourceName": "propertyorganizerb35f1b66PostConfirmation",
+  "parentStack": "auth",
+  "triggerEnvs": [],
+  "triggerDir": "/Users/dario/.nvm/versions/node/v16.13.2/lib/node_modules/@aws-amplify/cli/node_modules/@aws-amplify/amplify-category-auth/provider-utils/awscloudformation/triggers/PostConfirmation",
+  "triggerTemplate": "PostConfirmation.json.ejs",
+  "triggerEventPath": "PostConfirmation.event.json",
+  "roleName": "propertyorganizerb35f1b66PostConfirmation",
+  "skipEdit": true,
+  "GROUP": "users",
+  "enableCors": false
+}

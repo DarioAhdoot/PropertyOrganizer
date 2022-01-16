@@ -20,12 +20,12 @@ export const createProperty = /* GraphQL */ `
         bedrooms
         bathrooms
         area
+        floor
+        floors
         diningRoom
         balcony
         patio
-        floor
         lift
-        floors
         parking
         washer
         dryer
@@ -36,6 +36,7 @@ export const createProperty = /* GraphQL */ `
       listingType
       rentalInfo {
         rentalPrice
+        deposit
         utilities
         leaseLength
         parkingPrice
@@ -54,6 +55,7 @@ export const createProperty = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
@@ -75,12 +77,12 @@ export const updateProperty = /* GraphQL */ `
         bedrooms
         bathrooms
         area
+        floor
+        floors
         diningRoom
         balcony
         patio
-        floor
         lift
-        floors
         parking
         washer
         dryer
@@ -91,6 +93,7 @@ export const updateProperty = /* GraphQL */ `
       listingType
       rentalInfo {
         rentalPrice
+        deposit
         utilities
         leaseLength
         parkingPrice
@@ -109,6 +112,7 @@ export const updateProperty = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
@@ -130,12 +134,12 @@ export const deleteProperty = /* GraphQL */ `
         bedrooms
         bathrooms
         area
+        floor
+        floors
         diningRoom
         balcony
         patio
-        floor
         lift
-        floors
         parking
         washer
         dryer
@@ -146,6 +150,7 @@ export const deleteProperty = /* GraphQL */ `
       listingType
       rentalInfo {
         rentalPrice
+        deposit
         utilities
         leaseLength
         parkingPrice
@@ -164,6 +169,7 @@ export const deleteProperty = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
