@@ -26,9 +26,7 @@ import {
   useRecoilState,
 } from 'recoil';
 import _ from 'lodash';
-
-
-import { CreatePropertyInput, ListingType, PropertyType, Property, UpdatePropertyInput } from '../API';
+import { CreatePropertyInput, ListingType, PropertyType, UpdatePropertyInput } from '../API';
 import { createProperty, updateProperty } from '../GraphQLAPI';
 import {
   propertiesAtom,

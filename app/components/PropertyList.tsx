@@ -41,7 +41,7 @@ const PropertyList = ({ navigation }: { navigation: any }) => {
     return property.address.toLowerCase().includes(filterText.toLowerCase());
   });
   // console.log(`FILTERED PROPERTIES: ${JSON.stringify(filteredProperties)}`);
-  console.log(`Navigation: ${JSON.stringify(navigation)}`);
+  // console.log(`Navigation: ${JSON.stringify(navigation)}`);
 
   return (
     <View style={style.container}>

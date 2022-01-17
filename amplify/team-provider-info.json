@@ -14,13 +14,18 @@
     "categories": {
       "auth": {
         "propertyorganizerb35f1b66": {},
-        "propertyorganizer2aa4209e": {}
+        "propertyorganizer2aa4209e": {},
+        "true": {}
       },
       "function": {
         "propertyorganizerb35f1b66PostConfirmation": {
           "GROUP": "users",
           "deploymentBucketName": "amplify-propertyorganizer-dev-120508-deployment",
           "s3Key": "amplify-builds/propertyorganizerb35f1b66PostConfirmation-4d3046324f4c4d464a68-build.zip"
+        },
+        "S3Trigger60af1b4b": {
+          "deploymentBucketName": "amplify-propertyorganizer-dev-120508-deployment",
+          "s3Key": "amplify-builds/S3Trigger60af1b4b-385a2f316651366f5236-build.zip"
         }
       }
     }
