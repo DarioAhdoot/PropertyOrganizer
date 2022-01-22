@@ -3,7 +3,7 @@ import {
   selector,
   useRecoilValue,
 } from 'recoil';
-import { Property } from './GraphQLAPI';
+import { Property } from './API';
 
 export const propertiesAtom = atom({
   key: 'propertiesState',
@@ -13,10 +13,7 @@ export const filterTextAtom = atom({
   key: 'filterTextState',
   default: '',
 });
-export const currentPropertyAtom = atom({
-  key: 'currentPropertyState',
-  default: null as Property | null,
-});
+
 
 // export const filteredPropertiesSelector = selector({
 //   key: 'filteredProperties',

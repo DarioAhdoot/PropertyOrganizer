@@ -87,7 +87,7 @@ export async function updateProperty(input: Types.UpdatePropertyInput): Promise<
   }
 }
 
-export async function deleteProperty(input: Types.DeletePropertyInput) {
+export async function deleteProperty(input: Types.DeletePropertyInput): Promise<Types.Property> {
   console.log(`Calling deleteProperty with input: ${JSON.stringify(input)}`);
 
   const deleteMutationVariables: Types.DeletePropertyMutationVariables = { input };
@@ -104,4 +104,17 @@ export async function deleteProperty(input: Types.DeletePropertyInput) {
     throw new Error('deleteProperty mutation failed');
   }
 }
-  
+
+export async function addImageToProperty(property: Types.Property, fileKey: string): Promise<Types.Property> {
+  const newImageUrls: string[] = property.imageUrls ? [...property.imageUrls, fileKey] : [fileKey];
+  const input: Types.UpdatePropertyInput = { id: property.id, imageUrls: newImageUrls, _version: property._version };
+  const updatedProperty = await updateProperty(input);
+  return updatedProperty;
+}
+
+export async function removeImageFromProperty(property: Types.Property, fileKey: string): Promise<Types.Property> {
+  const newImageUrls: string[] = property.imageUrls ? property.imageUrls.filter((url: string) => url !== fileKey) : [];
+  const input: Types.UpdatePropertyInput = { id: property.id, imageUrls: newImageUrls, _version: property._version };
+  const updatedProperty = await updateProperty(input);
+  return updatedProperty;
+}
