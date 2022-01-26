@@ -1,9 +1,20 @@
+import { Storage } from 'aws-amplify';
 import { AmplifyS3Image } from '@aws-amplify/ui-react/legacy';
 // @ts-ignore
 import { S3Image } from 'aws-amplify-react-native';
 import { useState, useEffect } from 'react';
-import { Dimensions, StyleSheet, Text, View, FlatList, Platform } from 'react-native';
-import { Modal, Progress, Row } from 'native-base';
+import {
+  Dimensions,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import {
+  Modal,
+  Progress,
+  Row,
+} from 'native-base';
 import { Button } from 'react-native-elements';
 import { Headline, Subheading } from 'react-native-paper';
 import Icon from '@mdi/react'
@@ -19,7 +30,6 @@ import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import * as Linking from 'expo-linking';
 import { addImageToProperty, removeImageFromProperty } from '../GraphQLAPI';
 import { Property, RentalInfo, PropertyType, ListingType } from '../API';
-import { uploadMedia } from '../media';
 import { propertiesAtom } from '../state';
 
 const { width, height } = Dimensions.get('window');
@@ -116,13 +126,15 @@ const ImageSwiper: React.FunctionComponent = () => {
         }}
         renderItem={({ item }) => {
           if (Platform.OS === 'web') {
-            return <AmplifyS3Image style={{
-              width,
-              height: 300,
-            }}
-              imgKey={item.key} />
+            return <AmplifyS3Image
+              style={{ width: 3, height: 300 }}
+              imgProps={{
+                width: 300,
+                height: 300,
+              }}
+            imgKey={item.key} />
           } else {
-            return <S3Image style={styles.image} imgKey={item.key} level='public' resizeMode='contain' />
+            return <S3Image style={styles.image} imgKey={item.key} resizeMode='contain' />
           }
         }}>
       </SwiperFlatList>
@@ -151,6 +163,7 @@ const MediaUploaderWeb: React.FunctionComponent = () => {
   const [progressText, setProgressText] = useState<string>('');
   const showModal = isUploading || isDeleting;
 
+  console.log(`******************************************************`);
   console.log(`loading: ${loading}`);
   console.log(`uploading: ${isUploading}`);
   console.log(`deleting: ${isDeleting}`);
@@ -166,37 +179,31 @@ const MediaUploaderWeb: React.FunctionComponent = () => {
     const file = filesContent[0];
     const fileName = file.name;
     const extension = fileName.split('.').pop();
-    const fileKey = `${propertyId}/${uuidv4()}${extension}`;
+    const fileKey = `${propertyId}/${uuidv4()}.${extension}`;
     const content = file.content;
+    
+    Storage.put(fileKey, content, { progressCallback: (progress) => {
+      const percent = Math.round(progress.loaded / progress.total * 100);
+      console.log(`Uploading progress: ${percent}`);
+      setProgressText(`Uploading file: ${percent}%`);
+      setProgressValue(percent);
+    }}).then(async () => {
+      setProgressText(`Updating database...`);
 
-    uploadMedia(
-      content,
-      fileKey,
-      (progress) => {
-        console.log(`Uploading progress: ${progress.loaded}/${progress.total}`);
-        setProgressText(`Uploading file: ${progress.loaded}/${progress.total}%`);
-        setProgressValue(progress.loaded / progress.total);
-      },
-      async (event, error) => {
-        if (event) {
-          setProgressText(`Updating database...`);
+      const updatedProperty = await addImageToProperty(property, fileKey);
+      setProperty(updatedProperty);
 
-          const updatedProperty = await addImageToProperty(property, fileKey);
-          setProperty(updatedProperty);
+      const index = properties.findIndex((p) => p.id === propertyId);
+      const newProperties = [...properties];
+      newProperties[index] = updatedProperty;
+      setProperties(newProperties);
 
-          const index = properties.findIndex((p) => p.id === propertyId);
-          const newProperties = [...properties];
-          newProperties[index] = updatedProperty;
-          setProperties(newProperties);
-
-          setIsUploading(false);
-        } else {
-          console.log(`Error uploading ${fileKey}!`);
-          console.error(error);
-          setIsUploading(false);
-        }
-      }
-    )
+      setIsUploading(false);
+    }).catch((err) => {
+      console.log(`Error uploading ${fileKey}!`);
+      console.error(err);
+      setIsUploading(false);
+    });
   }
 
   return (
@@ -206,14 +213,19 @@ const MediaUploaderWeb: React.FunctionComponent = () => {
         <Button title={'Remove Image'} onPress={async (event) => {
           console.log(`Event: ${JSON.stringify(event.type)}`);
           setIsDeleting(true);
-          const updatedProperty = await removeImageFromProperty(property, property.imageUrls![selectedMediaIndex!.index]);
-          setProperty(updatedProperty);
+          const mediaIndex = selectedMediaIndex!.index;
+          Storage.remove(property.imageUrls![mediaIndex]).then(async () => {
+            const updatedProperty = await removeImageFromProperty(property, property.imageUrls![mediaIndex]);
+            setProperty(updatedProperty);
 
-          const index = properties.findIndex((p) => p.id === updatedProperty.id);
-          const newProperties = [...properties];
-          newProperties[index] = updatedProperty;
-          setProperties(newProperties);
-          setIsDeleting(false);
+            const index = properties.findIndex((p) => p.id === updatedProperty.id);
+            const newProperties = [...properties];
+            newProperties[index] = updatedProperty;
+            setProperties(newProperties);
+          }).catch((err) => {
+            console.error(`Error removing ${property.imageUrls![mediaIndex]}!, ${err}`);
+            setIsDeleting(false);
+          });
         }} />
       </Row>
       <Modal isOpen={showModal}>
@@ -239,7 +251,7 @@ const LinksTable: React.FunctionComponent = () => {
   const hasContactEmail = !_.isNil(property.contactEmail) && !_.isEmpty(property.contactEmail);
 
   return (
-    <View style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'row', minHeight: 40 }}>
+    <Row>
       <Button
         style={styles.iconButton}
         icon={{
@@ -307,24 +319,25 @@ const LinksTable: React.FunctionComponent = () => {
         disabled={!hasContactEmail}
         onPress={() => Linking.openURL(`phone:${property.contactEmail}`)}>
       </Button>
-    </View>
+    </Row>
   );
 }
 
 const RentalInfoTable: React.FunctionComponent = () => {
-
   const property = useRecoilValue(currentPropertyAtom);
   const rentalInfo = property.rentalInfo!;
 
   return (
     <View>
       <Subheading>Rental Info</Subheading>
-      <Text>Rent: {rentalInfo.rentalPrice || '?'} €/month</Text>
-      <Text>Utilities: {rentalInfo.utilities || '?'} €/month</Text>
-      <Text>Parking: {rentalInfo.parkingPrice || '?'} €/month</Text>
-      <Text>Lease Length: {rentalInfo.leaseLength || '?'} months</Text>
-      <Text>Furnished: {rentalInfo.furnished ? 'Yes' : (rentalInfo.furnished === false ? 'No' : '?')}</Text>
-      <Text>Pets: {rentalInfo.pets ? 'Yes' : (rentalInfo.pets === false ? 'No' : '?')}</Text>
+      <Row>
+        <Text>Rent: {rentalInfo.rentalPrice || '?'} €/month</Text>
+        <Text>Utilities: {rentalInfo.utilities || '?'} €/month</Text>
+        <Text>Parking: {rentalInfo.parkingPrice || '?'} €/month</Text>
+        <Text>Lease Length: {rentalInfo.leaseLength || '?'} months</Text>
+        <Text>Furnished: {rentalInfo.furnished ? 'Yes' : (rentalInfo.furnished === false ? 'No' : '?')}</Text>
+        <Text>Pets: {rentalInfo.pets ? 'Yes' : (rentalInfo.pets === false ? 'No' : '?')}</Text>
+      </Row>
     </View>
   );
 };

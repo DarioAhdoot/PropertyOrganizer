@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Checkbox,
+  Container,
   FormControl,
   Input,
   ScrollView,
@@ -34,7 +35,7 @@ import {
 
 const styles = StyleSheet.create({
   container: {
-    width: Platform.OS === 'web' ? 500 : '100%',
+    width: Platform.OS === 'web' ? '500px' : '100%',
     flex: 1,
   },
   formRow: {
@@ -78,7 +79,9 @@ const PropertyAdd = ({ navigation }: { navigation: any }) => {
   };
 
   // Can't call it synchronously because we're not allowed to do so while rendering
-  setTimeout(() => navigation.setOptions({ title: "Add a new property" }));
+  React.useEffect(() => {
+    setTimeout(() => navigation.setOptions({ title: "Add a new property" }));
+  });
 
   return (
     <PropertyAddUpdate
@@ -90,6 +93,21 @@ const PropertyAdd = ({ navigation }: { navigation: any }) => {
     />
   )
 };
+
+function cleanseData(data: CreatePropertyInput | UpdatePropertyInput) {
+  let cleansedData = _.omit(data, ['_lastChangedAt', 'updatedAt', 'createdAt', '_deleted', 'owner']);
+
+  // cleansedData = _.cloneDeepWith(cleansedData, (value) => {
+  //   console.log(`Value=${JSON.stringify(value)}`);
+  //   if (value === "null") {
+  //     console.log("cleansing null");
+  //     return null;
+  //   }
+  //   return undefined;
+  // });
+
+  return cleansedData;
+}
 
 const PropertyUpdate = (props: any) => {
   const property = props.route.params.property;
@@ -103,7 +121,7 @@ const PropertyUpdate = (props: any) => {
 
   const onSubmit: SubmitFn = async (data: CreatePropertyInput | UpdatePropertyInput) => {
     try {
-      const cleansedData = _.omit(data, ['_lastChangedAt', 'updatedAt', 'createdAt', '_deleted', 'owner']);
+      const cleansedData = cleanseData(data);
       const updatedProperty = await updateProperty(cleansedData as UpdatePropertyInput);
       let newProperties = [...properties];
       const index = newProperties.findIndex(p => p.id === updatedProperty.id);
@@ -144,24 +162,25 @@ const PropertyAddUpdate = ({
 }) => {
   if (Platform.OS === 'web') {
     return (
-      <View style={styles.container}>
+      <Container style={styles.container}>
         <GeneralInfoSection control={control} errors={errors} />
         <RentalInfoSection control={control} errors={errors} />
         <PropertySpecSection control={control} errors={errors} />
         <Button title={submitButtonText} onPress={handleSubmit(onSubmit)} />
-      </View>
+      </Container>
     );
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <GeneralInfoSection control={control} errors={errors} />
-      <RentalInfoSection control={control} errors={errors} />
-      <PropertySpecSection control={control} errors={errors} />
-      <Button title={submitButtonText} onPress={handleSubmit(onSubmit)} />
-    </ScrollView>
+    <Container style={styles.container}>
+      <ScrollView>
+        <GeneralInfoSection control={control} errors={errors} />
+        <RentalInfoSection control={control} errors={errors} />
+        <PropertySpecSection control={control} errors={errors} />
+        <Button title={submitButtonText} onPress={handleSubmit(onSubmit)} />
+      </ScrollView>
+    </Container>
   );
-
 };
 
 
@@ -686,8 +705,8 @@ const CountInput = ({
               <Select
                 style={styles.formInput}
                 placeholder={placeHolder}
-                onValueChange={onChange}
-                selectedValue={value}>
+                onValueChange={(v) => onChange(parseInt(v))}
+                selectedValue={JSON.stringify(value)}>
                 <Select.Item label={'0'} value={'0'} />
                 <Select.Item label={'1'} value={'1'} />
                 <Select.Item label={'2'} value={'2'} />
@@ -727,16 +746,13 @@ const IndeterminateCheckBox = ({
         control={control}
         render={({ field: { onChange, value } }) => (
           <Checkbox
-            name={propName}
             style={styles.formInput}
-            onChange={onChange}
             value={value}
+            onChange={onChange}
             isChecked={value}
             isIndeterminate={true}
             isInvalid={errors[propName]}
-          >
-            <Text>{title}</Text>
-          </Checkbox>
+            />
         )}
         name={propName}
       />
@@ -770,7 +786,7 @@ const PickerInput = ({
             <Select
               style={styles.formInput}
               onValueChange={onChange}
-              selectedValue={value.label}
+              selectedValue={value}
               placeholder={placeHolder}>
               {items.map((item, index) => (<Select.Item label={item.label} value={item.value} key={index} />))}
             </Select>
