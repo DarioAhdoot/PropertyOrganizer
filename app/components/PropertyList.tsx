@@ -1,8 +1,11 @@
 import { DataTable, Searchbar } from 'react-native-paper';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Button } from 'react-native-elements';
-
-import fetch from 'isomorphic-fetch';
 
 import {
   useRecoilState,
@@ -12,11 +15,11 @@ import {
   propertiesAtom,
   filterTextAtom,
 } from '../state';
-import { listProperties, createProperty, deleteProperty } from '../GraphQLAPI';
-import { ListingType, PropertyType, Property } from '../models'; 
+import { deleteProperty } from '../GraphQLAPI';
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
+    height: '100%',
   },
   filterBar: {
     paddingTop: 30,
@@ -32,6 +35,21 @@ const style = StyleSheet.create({
     paddingStart: 10,
     paddingEnd: 10,
   },
+  touchableOpacityStyle: {
+    position: 'absolute',
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 30,
+    bottom: 30,
+  },
+  floatingButtonStyle: {
+    resizeMode: 'contain',
+    width: 50,
+    height: 50,
+    backgroundColor:'#FFFFFF00'
+  },
 });
 
 const PropertyList = ({ navigation }: { navigation: any }) => {
@@ -44,13 +62,13 @@ const PropertyList = ({ navigation }: { navigation: any }) => {
   // console.log(`Navigation: ${JSON.stringify(navigation)}`);
 
   return (
-    <View style={style.container}>
-      <View style={style.filterBar}>
+    <View style={styles.container}>
+      <View style={styles.filterBar}>
         <Searchbar
           placeholder='Search'
           onChangeText={(text) => { setFilterText(text) }}
           value={filterText}
-          style={style.searchBar}
+          style={styles.searchBar}
           autoComplete={false}
         />
         <Button
@@ -61,13 +79,11 @@ const PropertyList = ({ navigation }: { navigation: any }) => {
             color: 'black',
           }}
           type='clear'
-          onPress={ () => {
-            navigation.navigate('PropertyAdd');
-          }}
+          onPress={() => {}}
         />
       </View>
-      <ScrollView style={style.container}>
-        <DataTable style={style.dataTable}>
+      <ScrollView style={styles.container}>
+        <DataTable style={styles.dataTable}>
           <DataTable.Header>
             <DataTable.Title>Address</DataTable.Title>
             <DataTable.Title>Specs</DataTable.Title>
@@ -132,6 +148,23 @@ const PropertyList = ({ navigation }: { navigation: any }) => {
           }
         </DataTable>
       </ScrollView>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => {
+          navigation.navigate('PropertyAdd');
+        }}
+        style={styles.touchableOpacityStyle}>
+        <Button
+          icon={{
+            name: 'plus',
+            type: 'font-awesome-5',
+            size: 20,
+            color: 'black',
+          }}
+          type='clear'
+          style={styles.floatingButtonStyle}
+        />
+      </TouchableOpacity>
     </View>
   );
 }

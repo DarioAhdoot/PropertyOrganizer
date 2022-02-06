@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
-  Checkbox,
   Container,
   FormControl,
   Input,
@@ -19,10 +18,8 @@ import {
 } from 'react-native';
 import { useForm, Controller, UseFormHandleSubmit } from 'react-hook-form';
 import PhoneInput from 'react-phone-number-input/react-native-input';
-// import Icon from '@mdi/react'
-// import {
-//   mdiCurrencyEur,
-// } from '@mdi/js'
+// @ts-ignore
+import Checkbox from 'react-native-flexible-checkbox';
 import {
   useRecoilState,
 } from 'recoil';
@@ -739,20 +736,50 @@ const IndeterminateCheckBox = ({
   control: any,
   errors: any
 }) => {
+  const [checkboxValue, setCheckboxValue] = React.useState('indeterminate');
+
+  useEffect(() => {
+    const valPropName = `_fields.${propName}._f.value`;
+    const controlValue = _.get(control, valPropName);
+    if (controlValue === true) {
+      setCheckboxValue('checked');
+    } else if (controlValue === false) {
+      setCheckboxValue('unchecked');
+    } else {
+      setCheckboxValue('indeterminate');
+    }
+  });
+  
   return (
     <View style={styles.formRow}>
       <FormLabel title={title} />
       <Controller
         control={control}
         render={({ field: { onChange, value } }) => (
-          <Checkbox
-            style={styles.formInput}
-            value={value}
-            onChange={onChange}
-            isChecked={value}
-            isIndeterminate={true}
-            isInvalid={errors[propName]}
-            />
+
+        <Checkbox
+          style={styles.formInput}
+          checked={checkboxValue}
+          onChange={(v: string) => {
+            console.log(v);
+
+            if (v === 'checked') {
+              onChange(true);
+            } else if (v === 'unchecked') {
+              onChange(false);
+            } else {
+              onChange(null);
+            }
+
+            setCheckboxValue(v);
+          }}
+          shape={'square'}
+          indeterminate
+          isInvalid={errors[propName]}
+          containerStyles={{
+            borderColor: '000F',
+          }}
+          />
         )}
         name={propName}
       />

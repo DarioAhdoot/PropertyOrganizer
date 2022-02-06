@@ -17,10 +17,6 @@ import {
 } from 'native-base';
 import { Button } from 'react-native-elements';
 import { Headline, Subheading } from 'react-native-paper';
-import Icon from '@mdi/react'
-import {
-  mdiAirConditioner,
-} from '@mdi/js'
 import _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { useFilePicker } from 'use-file-picker';
